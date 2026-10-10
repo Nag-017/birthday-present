@@ -7,7 +7,7 @@
   <title>Megha — Born Friday, October 20, 2006 · Bidar, Karnataka, India</title>
   <meta name="description"
     content="Megha arrived on Friday, October 20, 2006 in Bidar, Karnataka, India. The weather, the headlines, the #1 song, the moon overhead.">
-  <meta name="theme-color" content="#12110e">
+  <meta name="theme-color" content="#070b14">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +16,8 @@
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@1,400;1,600;1,700&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="animations.css">
 </head>
 
 <body>
@@ -25,39 +26,171 @@
   <canvas id="stars-canvas"></canvas>
   <div class="vignette-overlay" aria-hidden="true"></div>
 
+  <!-- 0. BIRTHDAY ENVELOPE & LETTER INTRO -->
+  <div id="letter-overlay" class="letter-overlay">
+    <div class="letter-backdrop" onclick="dismissLetter(event)"></div>
+    <div class="letter-stage">
+
+      <!-- Envelope Presentation (Click to Open) -->
+      <div id="envelope-wrapper" class="envelope-wrapper" onclick="openEnvelope()">
+        <div class="envelope-hint">
+          <span class="hint-sparkle">✦</span>
+          <span>A LETTER FOR YOU · TAP TO OPEN</span>
+          <span class="hint-sparkle">✦</span>
+        </div>
+
+        <div class="envelope">
+          <div class="envelope-back"></div>
+
+          <!-- Letter Sheet that slides up & expands -->
+          <div id="letter-sheet" class="letter-sheet" onclick="event.stopPropagation()">
+            <div class="letter-corner-ornament tl">✦</div>
+            <div class="letter-corner-ornament tr">✦</div>
+            <div class="letter-corner-ornament bl">✦</div>
+            <div class="letter-corner-ornament br">✦</div>
+
+            <div class="letter-inner">
+              <div class="letter-badge">OCTOBER 20 · SPECIAL DISPATCH</div>
+              <h2 class="letter-salutation">Hey Ingin,</h2>
+              <div class="letter-heading">Happy Birthday</div>
+              <div class="letter-divider">
+                <span class="divider-line"></span>
+                <span class="divider-star">✦</span>
+                <span class="divider-line"></span>
+              </div>
+
+              <div class="letter-content">
+                <p class="letter-verse">I wish you to have more nights where you fall asleep smiling.</p>
+                <p class="letter-verse">I wish to always have the courage to go after what you want.</p>
+                <p class="letter-verse">May each year be better than the last, not in numbers but in how it feels.</p>
+              </div>
+
+              <div class="letter-welcome-box">
+                <div class="welcome-label">MILESTONE CHAPTER</div>
+                <div class="welcome-title">WELCOME TO 20s</div>
+              </div>
+              <div class="letter-badge">-From a fan of yours</div>
+
+
+
+              <button class="letter-close-btn" id="letter-close-btn" onclick="dismissLetter(event)">
+                <span>Let's Travel Back in Time </span>
+                <span class="btn-arrow">↓</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Solid Pocket Liner (covers middle completely so no letter content peeks through) -->
+          <div class="envelope-pocket-liner"></div>
+
+          <!-- Envelope Pocket Folds -->
+          <div class="envelope-flap-top"></div>
+          <div class="envelope-pocket-left"></div>
+          <div class="envelope-pocket-right"></div>
+          <div class="envelope-pocket-bottom"></div>
+
+          <!-- Wax Seal -->
+          <div class="envelope-seal">
+            <div class="seal-inner">
+              <span class="seal-star">✦</span>
+              <span class="seal-num">20</span>
+            </div>
+            <div class="seal-ripple"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 0.5 TIME WARP REWIND OVERLAY (2026 -> 2006) -->
+  <div id="timewarp-overlay" class="timewarp-overlay" aria-hidden="true">
+    <div class="timewarp-backdrop"></div>
+    <div class="timewarp-portal-glow"></div>
+    <div class="timewarp-shockwave" id="timewarp-shockwave"></div>
+    <div class="timewarp-ring timewarp-ring-outer"></div>
+    <div class="timewarp-ring timewarp-ring-mid"></div>
+    <div class="timewarp-ring timewarp-ring-inner"></div>
+    <div class="timewarp-stars-container" id="timewarp-stars"></div>
+
+    <div class="timewarp-stage">
+      <div class="timewarp-label">
+        <span class="warp-star">✦</span>
+        <span>REWINDING 20 YEARS OF TIME</span>
+        <span class="warp-star">✦</span>
+      </div>
+
+      <!-- Chronometer Scroll Reel Viewport -->
+      <div class="timewarp-scroll-viewport" id="timewarp-viewport">
+        <div class="timewarp-scroll-lens" id="timewarp-lens">
+          <span class="lens-bracket tl"></span>
+          <span class="lens-bracket tr"></span>
+          <span class="lens-bracket bl"></span>
+          <span class="lens-bracket br"></span>
+          <span class="lens-pointer left">▸</span>
+          <span class="lens-pointer right">◂</span>
+        </div>
+        <div class="timewarp-year-track" id="timewarp-year-track">
+          <!-- Populated by timewarp-animation.js -->
+        </div>
+      </div>
+
+      <div class="timewarp-date" id="timewarp-date">OCTOBER 2026</div>
+      <div class="timewarp-elapsed" id="timewarp-elapsed">Present Day · Age 20</div>
+
+      <div class="timewarp-arrival" id="timewarp-arrival">
+        <div class="arrival-pill">✦ DESTINATION REACHED ✦</div>
+        <div class="arrival-date">FRIDAY · OCTOBER 20, 2006</div>
+        <div class="arrival-location">Bidar, Karnataka, India</div>
+      </div>
+    </div>
+  </div>
+
   <!-- Main Container -->
   <main class="page-wrapper">
 
     <!-- 1. HERO SECTION -->
     <header class="hero-section">
-      <div class="hero-brand">BORNHERE</div>
-      <div class="hero-badge">ISSUED FOR <span id="hero-recipient-name">MEGHA</span></div>
+      <div class="hero-brand">FOR</div>
+      <div class="hero-badge"> <span id="hero-recipient-name">MEGHA</span></div>
       <h1 class="hero-title">
         The world the day<br>
         <span class="gold-text italic" id="hero-name-highlight">Megha</span> arrived.
       </h1>
       <p class="hero-date">Friday, October 20, 2006</p>
       <p class="hero-location">Bidar, India</p>
+
+      <div class="hero-letter-pill-wrap">
+        <button class="hero-letter-pill" onclick="openBirthdayLetter()">
+          <span class="pill-icon">✉</span>
+          <span>Read Your Birthday Letter</span>
+        </button>
+      </div>
+
+      <div class="live-clock-badge" id="live-uptime-clock">19y 354d 00:13:42</div>
     </header>
 
     <!-- 2. THE SKY ABOVE YOU -->
     <section class="story-section" id="sky-section">
       <div class="section-label">THE SKY ABOVE YOU</div>
       <h2 class="section-headline">
-        A waning crescent hung over Bidar the night <span class="name-insert">Megha</span> was born.
+        A waning crescent hung over Bidar the night <span class="name-insert">YOU</span> were born.
       </h2>
 
       <div class="sky-display">
-        <!-- Crescent Moon Graphic -->
-        <div class="moon-graphic-wrapper">
-          <div class="moon-sphere">
-            <div class="moon-texture"></div>
-            <div class="moon-crescent-glow"></div>
-            <div class="moon-crescent-highlight"></div>
-            <div class="moon-dark-crater c1"></div>
-            <div class="moon-dark-crater c2"></div>
-            <div class="moon-dark-crater c3"></div>
+        <!-- Crescent Moon Graphic & Secret Whisper -->
+        <div class="moon-showcase" title="月が綺麗ですね">
+          <div class="moon-graphic-wrapper">
+            <div class="moon-sphere">
+              <div class="moon-texture"></div>
+              <div class="moon-crescent-glow"></div>
+              <div class="moon-crescent-highlight"></div>
+              <div class="moon-dark-crater c1"></div>
+              <div class="moon-dark-crater c2"></div>
+              <div class="moon-dark-crater c3"></div>
+            </div>
           </div>
+          <div class="moon-secret-whisper">“the moon is beautiful, isn't it?”</div>
         </div>
 
         <!-- Astronomy Table -->
@@ -132,43 +265,338 @@
     <!-- 4. THE SOUNDTRACK -->
     <section class="story-section" id="music-section">
       <div class="section-label">THE SOUNDTRACK</div>
-      <h2 class="section-headline">The song the world was humming.</h2>
+      <h2 class="section-headline">The songs the world, India, and Bidar were humming.</h2>
 
-      <div class="music-card">
-        <!-- Retro Cassette Artwork -->
-        <div class="cassette-artwork">
-          <div class="cassette-outer">
-            <div class="cassette-label-strip"></div>
-            <div class="cassette-window">
-              <div class="cassette-reel reel-left">
-                <div class="reel-teeth"></div>
+      <!-- Music Filter Tabs -->
+      <div class="music-filter-tabs">
+        <button class="music-filter-btn active" data-filter="all" onclick="filterMusic('all')">✦ Top (3)</button>
+        <button class="music-filter-btn" data-filter="global" onclick="filterMusic('global')">🌐 Global (3)</button>
+        <button class="music-filter-btn" data-filter="hindi" onclick="filterMusic('hindi')">🇮🇳 Hindi (3)</button>
+        <button class="music-filter-btn" data-filter="kannada" onclick="filterMusic('kannada')">💛 Kannada (3)</button>
+      </div>
+
+      <div class="music-cards-list">
+
+        <!-- 1. Global 1: Justin Timberlake - SexyBack (Top Global) -->
+        <div class="music-card" data-category="global" data-featured="true">
+          <div class="cassette-artwork">
+            <div class="cassette-outer">
+              <div class="cassette-label-strip"></div>
+              <div class="cassette-window">
+                <div class="cassette-reel reel-left">
+                  <div class="reel-teeth"></div>
+                </div>
+                <div class="cassette-tape-ribbon"></div>
+                <div class="cassette-reel reel-right">
+                  <div class="reel-teeth"></div>
+                </div>
               </div>
-              <div class="cassette-tape-ribbon"></div>
-              <div class="cassette-reel reel-right">
-                <div class="reel-teeth"></div>
-              </div>
+              <div class="cassette-bottom-ridge"></div>
             </div>
-            <div class="cassette-bottom-ridge"></div>
+          </div>
+          <div class="music-info">
+            <div class="chart-badge">✦ GLOBAL · #1 ON BILLBOARD HOT 100</div>
+            <h3 class="song-title">"SexyBack"</h3>
+            <p class="song-artist">Justin Timberlake</p>
+            <p class="song-week">Week of October 20, 2006 · The defining global pop anthem of late 2006</p>
+            <div class="music-links">
+              <a href="https://open.spotify.com/track/0O45fw2L5vsWpdsOdXwNAR" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on Spotify">
+                Spotify ↗
+              </a>
+              <a href="https://www.youtube.com/watch?v=3gOHvDP_vCs" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on YouTube">
+                YouTube ↗
+              </a>
+            </div>
           </div>
         </div>
 
-        <!-- Song Metadata -->
-        <div class="music-info">
-          <div class="chart-badge">#1 ON BILLBOARD HOT 100</div>
-          <h3 class="song-title">"SexyBack"</h3>
-          <p class="song-artist">Justin Timberlake</p>
-          <p class="song-week">Week of 2006-10-14</p>
-          <div class="music-links">
-            <a href="https://open.spotify.com/search/SexyBack%20Justin%20Timberlake" target="_blank"
-              rel="noopener noreferrer" class="music-link-btn">
-              Spotify →
-            </a>
-            <a href="https://www.youtube.com/results?search_query=SexyBack+Justin+Timberlake+official+video"
-              target="_blank" rel="noopener noreferrer" class="music-link-btn">
-              YouTube →
-            </a>
+        <!-- 2. Global 2: Shakira - Hips Don't Lie -->
+        <div class="music-card" data-category="global" style="display: none;">
+          <div class="cassette-artwork">
+            <div class="cassette-outer">
+              <div class="cassette-label-strip"></div>
+              <div class="cassette-window">
+                <div class="cassette-reel reel-left">
+                  <div class="reel-teeth"></div>
+                </div>
+                <div class="cassette-tape-ribbon"></div>
+                <div class="cassette-reel reel-right">
+                  <div class="reel-teeth"></div>
+                </div>
+              </div>
+              <div class="cassette-bottom-ridge"></div>
+            </div>
+          </div>
+          <div class="music-info">
+            <div class="chart-badge">✦ GLOBAL · #1 WORLDWIDE SMASH HIT</div>
+            <h3 class="song-title">"Hips Don't Lie"</h3>
+            <p class="song-artist">Shakira feat. Wyclef Jean</p>
+            <p class="song-week">October 2006 · The record-shattering global anthem dominating worldwide airwaves</p>
+            <div class="music-links">
+              <a href="https://open.spotify.com/track/2oaGtVSJwivQkslaiDXOTr" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on Spotify">
+                Spotify ↗
+              </a>
+              <a href="https://www.youtube.com/watch?v=DUT5rEU6pqM" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on YouTube">
+                YouTube ↗
+              </a>
+            </div>
           </div>
         </div>
+
+        <!-- 3. Global 3: Snow Patrol - Chasing Cars -->
+        <div class="music-card" data-category="global" style="display: none;">
+          <div class="cassette-artwork">
+            <div class="cassette-outer">
+              <div class="cassette-label-strip"></div>
+              <div class="cassette-window">
+                <div class="cassette-reel reel-left">
+                  <div class="reel-teeth"></div>
+                </div>
+                <div class="cassette-tape-ribbon"></div>
+                <div class="cassette-reel reel-right">
+                  <div class="reel-teeth"></div>
+                </div>
+              </div>
+              <div class="cassette-bottom-ridge"></div>
+            </div>
+          </div>
+          <div class="music-info">
+            <div class="chart-badge">✦ GLOBAL · TOP 5 BILLBOARD HOT 100</div>
+            <h3 class="song-title">"Chasing Cars"</h3>
+            <p class="song-artist">Snow Patrol</p>
+            <p class="song-week">October 2006 · The unforgettable emotional ballad holding radio charts across autumn
+              2006</p>
+            <div class="music-links">
+              <a href="https://open.spotify.com/track/11ZEylKdz4J9g0cR45z2p9" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on Spotify">
+                Spotify ↗
+              </a>
+              <a href="https://www.youtube.com/watch?v=GemKqzILV4w" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on YouTube">
+                YouTube ↗
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Hindi 1: Mitwa - Kabhi Alvida Naa Kehna (Top Hindi) -->
+        <div class="music-card" data-category="hindi" data-featured="true">
+          <div class="cassette-artwork">
+            <div class="cassette-outer cassette-hindi">
+              <div class="cassette-label-strip"></div>
+              <div class="cassette-window">
+                <div class="cassette-reel reel-left">
+                  <div class="reel-teeth"></div>
+                </div>
+                <div class="cassette-tape-ribbon"></div>
+                <div class="cassette-reel reel-right">
+                  <div class="reel-teeth"></div>
+                </div>
+              </div>
+              <div class="cassette-bottom-ridge"></div>
+            </div>
+          </div>
+          <div class="music-info">
+            <div class="chart-badge">✦ BOLLYWOOD · #1 ON AIRPLAY & RADIO MIRCHI CHARTS</div>
+            <h3 class="song-title">"Mitwa"</h3>
+            <p class="song-artist">Shafqat Amanat Ali & Shankar Mahadevan · <em>Kabhi Alvida Naa Kehna</em></p>
+            <p class="song-week">October 2006 · Composed by Shankar-Ehsaan-Loy, India's biggest album of 2006</p>
+            <div class="music-links">
+              <a href="https://open.spotify.com/track/4BTPzhEsyW3blWcxcuhLM0" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on Spotify">
+                Spotify ↗
+              </a>
+              <a href="https://www.youtube.com/watch?v=5txaRiJfQXM" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on YouTube">
+                YouTube ↗
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Hindi 2: Aaj Ki Raat - Don -->
+        <div class="music-card" data-category="hindi" style="display: none;">
+          <div class="cassette-artwork">
+            <div class="cassette-outer cassette-hindi">
+              <div class="cassette-label-strip"></div>
+              <div class="cassette-window">
+                <div class="cassette-reel reel-left">
+                  <div class="reel-teeth"></div>
+                </div>
+                <div class="cassette-tape-ribbon"></div>
+                <div class="cassette-reel reel-right">
+                  <div class="reel-teeth"></div>
+                </div>
+              </div>
+              <div class="cassette-bottom-ridge"></div>
+            </div>
+          </div>
+          <div class="music-info">
+            <div class="chart-badge">✦ BOLLYWOOD · RELEASED OCTOBER 20, 2006 (DIWALI BLOCKBUSTER)</div>
+            <h3 class="song-title">"Aaj Ki Raat"</h3>
+            <p class="song-artist">Alisha Chinai, Mahalakshmi Iyer & Sonu Nigam · <em>Don</em></p>
+            <p class="song-week">October 20, 2006 · Shankar-Ehsaan-Loy's electrifying dance sensation released on
+              Megha's exact birthday</p>
+            <div class="music-links">
+              <a href="https://open.spotify.com/track/0srsbEtjwgN0F4LLuv20SW" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on Spotify">
+                Spotify ↗
+              </a>
+              <a href="https://www.youtube.com/watch?v=s71L90j9QjA" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on YouTube">
+                YouTube ↗
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Hindi 3: Tu Hi Meri Shab Hai - Gangster -->
+        <div class="music-card" data-category="hindi" style="display: none;">
+          <div class="cassette-artwork">
+            <div class="cassette-outer cassette-hindi">
+              <div class="cassette-label-strip"></div>
+              <div class="cassette-window">
+                <div class="cassette-reel reel-left">
+                  <div class="reel-teeth"></div>
+                </div>
+                <div class="cassette-tape-ribbon"></div>
+                <div class="cassette-reel reel-right">
+                  <div class="reel-teeth"></div>
+                </div>
+              </div>
+              <div class="cassette-bottom-ridge"></div>
+            </div>
+          </div>
+          <div class="music-info">
+            <div class="chart-badge">✦ BOLLYWOOD · #1 CHART-TOPPING ROMANTIC ANTHEM</div>
+            <h3 class="song-title">"Tu Hi Meri Shab Hai"</h3>
+            <p class="song-artist">KK · <em>Gangster</em></p>
+            <p class="song-week">October 2006 · Composed by Pritam, immortalized by KK, soundtracking autumn 2006</p>
+            <div class="music-links">
+              <a href="https://open.spotify.com/track/4IGfpRPTnhzZyL74Ilubrb" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on Spotify">
+                Spotify ↗
+              </a>
+              <a href="https://www.youtube.com/watch?v=kYJv8y6_D6s" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on YouTube">
+                YouTube ↗
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. Kannada 1: Anisuthide - Mungaru Male (Top Kannada) -->
+        <div class="music-card" data-category="kannada" data-featured="true">
+          <div class="cassette-artwork">
+            <div class="cassette-outer cassette-kannada">
+              <div class="cassette-label-strip"></div>
+              <div class="cassette-window">
+                <div class="cassette-reel reel-left">
+                  <div class="reel-teeth"></div>
+                </div>
+                <div class="cassette-tape-ribbon"></div>
+                <div class="cassette-reel reel-right">
+                  <div class="reel-teeth"></div>
+                </div>
+              </div>
+              <div class="cassette-bottom-ridge"></div>
+            </div>
+          </div>
+          <div class="music-info">
+            <div class="chart-badge">✦ KARNATAKA · ALL-TIME CULTURAL PHENOMENON</div>
+            <h3 class="song-title">"Anisuthide"</h3>
+            <p class="song-artist">Sonu Nigam · <em>Mungaru Male</em></p>
+            <p class="song-week">October 2006 · Lyrics by Jayanth Kaikini, Music by Mano Murthy · Karnataka's forever
+              melody</p>
+            <div class="music-links">
+              <a href="https://open.spotify.com/track/2Rts79IsoUBDH2fam6LROy" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on Spotify">
+                Spotify ↗
+              </a>
+              <a href="https://www.youtube.com/watch?v=nlsLKA6hlVQ" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on YouTube">
+                YouTube ↗
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. Kannada 2: O Gunavantha - Jothe Jotheyali -->
+        <div class="music-card" data-category="kannada" style="display: none;">
+          <div class="cassette-artwork">
+            <div class="cassette-outer cassette-kannada">
+              <div class="cassette-label-strip"></div>
+              <div class="cassette-window">
+                <div class="cassette-reel reel-left">
+                  <div class="reel-teeth"></div>
+                </div>
+                <div class="cassette-tape-ribbon"></div>
+                <div class="cassette-reel reel-right">
+                  <div class="reel-teeth"></div>
+                </div>
+              </div>
+              <div class="cassette-bottom-ridge"></div>
+            </div>
+          </div>
+          <div class="music-info">
+            <div class="chart-badge">✦ KARNATAKA · 25-WEEK SILVER JUBILEE SENSATION</div>
+            <h3 class="song-title">"O Gunavantha"</h3>
+            <p class="song-artist">Sonu Nigam & Shreya Ghoshal · <em>Jothe Jotheyali</em></p>
+            <p class="song-week">October 2006 · Composed by V. Harikrishna · The supreme romantic duet of 2006 across
+              Karnataka</p>
+            <div class="music-links">
+              <a href="https://open.spotify.com/track/5wYl1SduU5c6QWoxnEgUc0" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on Spotify">
+                Spotify ↗
+              </a>
+              <a href="https://www.youtube.com/watch?v=bTJHgrGZnS4" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on YouTube">
+                YouTube ↗
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. Kannada 3: Mungaru Maleye - Mungaru Male -->
+        <div class="music-card" data-category="kannada" style="display: none;">
+          <div class="cassette-artwork">
+            <div class="cassette-outer cassette-kannada">
+              <div class="cassette-label-strip"></div>
+              <div class="cassette-window">
+                <div class="cassette-reel reel-left">
+                  <div class="reel-teeth"></div>
+                </div>
+                <div class="cassette-tape-ribbon"></div>
+                <div class="cassette-reel reel-right">
+                  <div class="reel-teeth"></div>
+                </div>
+              </div>
+              <div class="cassette-bottom-ridge"></div>
+            </div>
+          </div>
+          <div class="music-info">
+            <div class="chart-badge">✦ KARNATAKA · HISTORIC AUDIO SALES RECORD-BREAKER</div>
+            <h3 class="song-title">"Mungaru Maleye"</h3>
+            <p class="song-artist">Sonu Nigam · <em>Mungaru Male</em></p>
+            <p class="song-week">October 2006 · Mano Murthy & Jayanth Kaikini's timeless rain anthem that captivated the
+              state</p>
+            <div class="music-links">
+              <a href="https://open.spotify.com/track/7zVuVHlwUGDSNwe9L8hFhO" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on Spotify">
+                Spotify ↗
+              </a>
+              <a href="https://www.youtube.com/watch?v=Fz6zKCrV2vg" target="_blank" rel="noopener noreferrer"
+                class="music-link-btn" title="Play on YouTube">
+                YouTube ↗
+              </a>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -239,198 +667,50 @@
         <ul class="archive-events-list">
           <li class="archive-event-item">
             <span class="event-bullet">•</span>
-            <p><strong>2005</strong> — The general conference of the United Nations Educational, Scientific and Cultural
-              Organization (UNESCO) passes the Convention on the Protection and Promotion of the Diversity of Cultural
-              Expressions.</p>
+            <p><strong>2006</strong> — On the exact Friday <span class="name-insert">Megha</span> arrived, Diwali
+              celebrations began across India as Shah Rukh Khan's musical thriller <em>Don</em> (featuring
+              Shankar-Ehsaan-Loy's "Aaj Ki Raat") and the romantic musical <em>Jaan-E-Mann</em> (with Sonu Nigam's "Sau
+              Dard Hain") were officially released in cinemas nationwide.</p>
           </li>
           <li class="archive-event-item">
             <span class="event-bullet">•</span>
-            <p><strong>2003</strong> — The Sloan Great Wall, once the largest cosmic structures known to humanity, is
-              discovered by students at Princeton University.</p>
+            <p><strong>2006</strong> — Karnataka's music industry experienced an unprecedented golden wave: the hit
+              romance <em>Jothe Jotheyali</em> completed silver-jubilee runs driven by "O Gunavantha" (Sonu Nigam &
+              Shreya Ghoshal), while recording concluded on <em>Mungaru Male</em>—the Mano Murthy and Jayanth Kaikini
+              soundtrack that set all-time audio sales records across Karnataka.</p>
           </li>
           <li class="archive-event-item">
             <span class="event-bullet">•</span>
-            <p><strong>2002</strong> — Top Gear, the revived popular British TV motoring magazine, premieres on BBC.</p>
+            <p><strong>1995</strong> — <em>Dilwale Dulhania Le Jayenge</em> (DDLJ) premiered in Indian cinemas on
+              October 20. Its iconic soundtrack composed by Jatin-Lalit ("Tujhe Dekha Toh Yeh Jaana Sanam", "Mehndi Laga
+              Ke Rakhna") permanently transformed Indian pop music and romance, becoming the longest-running film in
+              Indian cinema history.</p>
           </li>
           <li class="archive-event-item">
             <span class="event-bullet">•</span>
-            <p><strong>1995</strong> — Space Shuttle Columbia launches on STS-73.</p>
+            <p><strong><em>The Vampire Diaries</em> Lore</strong> — For fans of Mystic Falls, October 20 holds special
+              television lore: the acclaimed Season 3 episode <em>"Smells Like Teen Spirit"</em> originally premiered on
+              October 20, 2011, while in show canon, mid-to-late October marks the legendary <em>Night of the
+                Comet</em>—the
+              fateful night Damon Salvatore first swept back into town (and fellow October Libra Caroline Forbes was
+              born
+              just ten days prior on October 10!).</p>
           </li>
           <li class="archive-event-item">
             <span class="event-bullet">•</span>
-            <p><strong>1991</strong> — A 6.8 Mw earthquake strikes the Uttarkashi region of India, killing more than
-              1,000 people.</p>
+            <p><strong>Karnataka Heritage</strong> — October 20 marks the auspicious period of <em>Mahanavami & Ayudha
+                Puja</em> during the world-renowned Mysuru Dasara (<em>Nada Habba</em>), filling Karnataka with Carnatic
+              classical concerts, devotional <em>Dasara Pada</em>, and grand palace festivities celebrating the state's
+              artistic heritage.</p>
           </li>
         </ul>
-
-        <div class="archive-source">SOURCES · WIKIPEDIA</div>
       </div>
     </section>
 
 
-    <!-- 7. BORN UNDER THE SAME SKY (CO-BIRTHDAYS) -->
-    <section class="story-section" id="shared-birthdays-section">
-      <div class="section-label">BORN UNDER THE SAME SKY</div>
-      <h2 class="section-headline">You share the day with these lives.</h2>
 
-      <div class="people-card">
-        <div class="people-list">
-          <div class="person-row">
-            <div class="person-avatar-wrapper">
-              <div class="person-avatar avatar-yeremy">YP</div>
-            </div>
-            <div class="person-info">
-              <div class="person-name">Yéremy Pino</div>
-              <div class="person-desc">Spanish footballer</div>
-            </div>
-            <div class="person-year">2002</div>
-          </div>
 
-          <div class="person-row">
-            <div class="person-avatar-wrapper">
-              <div class="person-avatar avatar-paige">PB</div>
-            </div>
-            <div class="person-info">
-              <div class="person-name">Paige Bueckers</div>
-              <div class="person-desc">American basketball player</div>
-            </div>
-            <div class="person-year">2001</div>
-          </div>
 
-          <div class="person-row">
-            <div class="person-avatar-wrapper">
-              <div class="person-avatar avatar-kenneth">KW</div>
-            </div>
-            <div class="person-info">
-              <div class="person-name">Kenneth Walker III</div>
-              <div class="person-desc">American football player</div>
-            </div>
-            <div class="person-year">2000</div>
-          </div>
-
-          <div class="person-row">
-            <div class="person-avatar-wrapper">
-              <div class="person-avatar avatar-chuu">CH</div>
-            </div>
-            <div class="person-info">
-              <div class="person-name">Chuu</div>
-              <div class="person-desc">South Korean singer and television personality</div>
-            </div>
-            <div class="person-year">1999</div>
-          </div>
-
-          <div class="person-row">
-            <div class="person-avatar-wrapper">
-              <div class="person-avatar avatar-youngboy">YB</div>
-            </div>
-            <div class="person-info">
-              <div class="person-name">YoungBoy Never Broke Again</div>
-              <div class="person-desc">American rapper</div>
-            </div>
-            <div class="person-year">1999</div>
-          </div>
-        </div>
-
-        <div class="people-card-footer">SOURCE · WIKIPEDIA</div>
-      </div>
-    </section>
-
-    <!-- CALLOUT: ALREADY DRAWN -->
-    <div class="already-drawn-card">
-      <div class="drawn-tag">ALREADY DRAWN</div>
-      <h3 class="drawn-headline"><span class="name-insert">Megha</span>, your certificate exists.</h3>
-      <p class="drawn-desc">
-        This sky, this song, this weather — set down in gold, in <span class="name-insert">Megha</span>'s name.<br>
-        It is ready for you at the end of your story.
-      </p>
-      <a href="#certificate-section" class="drawn-cta-link">SEE YOUR CERTIFICATE ↓</a>
-    </div>
-
-    <!-- 8. THE RECEIPT (COST BASKET) -->
-    <section class="story-section" id="receipt-section">
-      <div class="section-label">THE RECEIPT</div>
-      <h2 class="section-headline">What a basket cost the day you were born.</h2>
-
-      <div class="receipt-outer-container">
-        <div class="thermal-receipt">
-          <div class="receipt-jagged-top" aria-hidden="true"></div>
-
-          <div class="receipt-header">
-            <div class="receipt-logo">★ BORNHERE ★</div>
-            <div class="receipt-title">Receipt — 2006-10-20</div>
-          </div>
-
-          <div class="receipt-divider-dashed"></div>
-
-          <div class="receipt-items-list">
-            <div class="receipt-line">
-              <span class="r-item">White bread, per lb (US)</span>
-              <span class="r-price">$1.10 <span class="r-arrow">→</span> $1.82</span>
-            </div>
-            <div class="receipt-line">
-              <span class="r-item">Whole milk, per gal (US)</span>
-              <span class="r-price">$3.06 <span class="r-arrow">→</span> $4.23</span>
-            </div>
-            <div class="receipt-line">
-              <span class="r-item">Regular gasoline, per gal (US)</span>
-              <span class="r-price">$2.27 <span class="r-arrow">→</span> $4.20</span>
-            </div>
-            <div class="receipt-line">
-              <span class="r-item">Movie ticket / ticket</span>
-              <span class="r-price">$6.41 <span class="r-arrow">→</span> $10.78</span>
-            </div>
-            <div class="receipt-line">
-              <span class="r-item">Postage stamp / stamp</span>
-              <span class="r-price">$0.39 <span class="r-arrow">→</span> $0.73</span>
-            </div>
-            <div class="receipt-line">
-              <span class="r-item">Big Mac (US) / burger</span>
-              <span class="r-price">$3.06 <span class="r-arrow">→</span> $5.79</span>
-            </div>
-            <div class="receipt-line">
-              <span class="r-item">Federal min wage / hr</span>
-              <span class="r-price">$5.15 <span class="r-arrow">→</span> $7.25</span>
-            </div>
-            <div class="receipt-line">
-              <span class="r-item">Median home (US)</span>
-              <span class="r-price">$245,400 <span class="r-arrow">→</span> $410,700</span>
-            </div>
-          </div>
-
-          <div class="receipt-divider-dashed"></div>
-
-          <div class="receipt-total-block">
-            <div class="receipt-subtotal-row">
-              <span class="r-total-label">Basket subtotal</span>
-              <span class="r-total-val">$16.29 <span class="r-arrow">→</span> $27.55</span>
-            </div>
-            <div class="receipt-inflation-note">
-              $1 on your birthday is worth <strong>$1.65</strong> today.
-            </div>
-          </div>
-
-          <div class="receipt-divider-dashed"></div>
-
-          <div class="receipt-sources-block">
-            <div class="r-source-heading">SOURCES</div>
-            <p>White bread, per lb: BLS APU0000702111</p>
-            <p>Whole milk, per gal: BLS APU0000709112</p>
-            <p>Regular gasoline, per gal: BLS APU000074714</p>
-            <p>Movie ticket: NATO — average US admission</p>
-            <p>Postage stamp: USPS first-class letter rate</p>
-            <p>Big Mac (US): The Economist Big Mac Index — US</p>
-            <p>Federal min wage: DOL FEDMINFRWG</p>
-            <p>Median home (US): Census/HUD MSPUS</p>
-          </div>
-
-          <div class="receipt-footer">
-            — THANK YOU, COME AGAIN —
-          </div>
-
-          <div class="receipt-jagged-bottom" aria-hidden="true"></div>
-        </div>
-      </div>
-    </section>
 
     <!-- 9. THE MARKET (BSE SENSEX) -->
     <section class="story-section" id="market-section">
@@ -489,9 +769,9 @@
               stroke-linecap="round" />
 
             <!-- Start Point Dot -->
-            <circle cx="40" cy="195" r="5" fill="#cda250" stroke="#1c1b17" stroke-width="2" />
+            <circle cx="40" cy="195" r="5" fill="#cda250" stroke="#0d1527" stroke-width="2" />
             <!-- End Point Dot -->
-            <circle cx="760" cy="30" r="5" fill="#f8cf74" stroke="#1c1b17" stroke-width="2" class="chart-end-dot" />
+            <circle cx="760" cy="30" r="5" fill="#f8cf74" stroke="#0d1527" stroke-width="2" class="chart-end-dot" />
           </svg>
         </div>
 
@@ -508,28 +788,40 @@
       <h2 class="section-headline">Small things that belong only to you.</h2>
 
       <div class="trivia-grid">
-        <!-- Card 1: Leaders -->
-        <div class="trivia-card">
-          <div class="t-card-header">THE WORLD YOU ARRIVED IN</div>
-          <div class="t-item">
-            <span class="t-role">PRIME MINISTER OF INDIA</span>
-            <span class="t-person">Manmohan Singh</span>
-          </div>
-          <div class="t-item">
-            <span class="t-role">US PRESIDENT</span>
-            <span class="t-person">George W. Bush</span>
-          </div>
-          <div class="t-item">
-            <span class="t-role">UK PRIME MINISTER</span>
-            <span class="t-person">Tony Blair</span>
-          </div>
-          <div class="t-item">
-            <span class="t-role">UN SECRETARY-GENERAL</span>
-            <span class="t-person">Kofi Annan</span>
-          </div>
-          <div class="t-item">
-            <span class="t-role">POPE</span>
-            <span class="t-person">Pope Benedict XVI</span>
+        <!-- Card 1: Birthstone & Flower (Featured) -->
+        <div class="trivia-card birthstone-flower-card">
+          <div class="t-card-header">OCTOBER EMBLEMS · BIRTHSTONE & FLOWER</div>
+          <div class="bf-showcase-grid">
+            <!-- Birthstone: Opal -->
+            <div class="bf-item">
+              <div class="bf-img-wrap">
+                <img src="assets/opal.jpg" alt="October Birthstone: Precious Opal" class="bf-img" loading="lazy">
+                <span class="bf-badge">BIRTHSTONE</span>
+              </div>
+              <div class="bf-details">
+                <div class="bf-name">Precious Opal</div>
+                <div class="bf-attr">Hope · Creativity · Shifting Light</div>
+                <p class="bf-note">Celebrated for its kaleidoscopic play-of-color, holding every hue of the rainbow in a
+                  single gem.</p>
+              </div>
+            </div>
+
+            <!-- Birth Flower: Marigold -->
+            <div class="bf-item">
+              <div class="bf-img-wrap">
+                <img src="assets/marigold.jpg" alt="October Birth Flower: Golden Marigold" class="bf-img"
+                  loading="lazy">
+                <span class="bf-badge">BIRTH FLOWER</span>
+              </div>
+              <div class="bf-details">
+                <div class="bf-name">Golden Marigold</div>
+                <div class="bf-attr">Warmth · Devotion · Auspicious Joy</div>
+                <p class="bf-note">A blossom of golden sunshine and vibrant warmth, cherished across Indian celebrations
+                  and festivities.</p>
+                <p class="bf-personal-note">“I might not know your favorite flower, but I know for certain you’re
+                  prettier than any of them.”</p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -555,16 +847,7 @@
           </div>
         </div>
 
-        <!-- Card 3: Generation -->
-        <div class="trivia-card">
-          <div class="t-card-header">YOUR GENERATION</div>
-          <div class="gen-name">Generation Z</div>
-          <p class="gen-desc">
-            Digital natives raised on YouTube, social feeds, and group chats.
-          </p>
-        </div>
-
-        <!-- Card 4: Star Sign -->
+        <!-- Card 3: Star Sign -->
         <div class="trivia-card icon-card">
           <div class="t-card-header">STAR SIGN</div>
           <div class="sign-content">
@@ -576,7 +859,7 @@
           </div>
         </div>
 
-        <!-- Card 5: Chinese Zodiac -->
+        <!-- Card 4: Chinese Zodiac -->
         <div class="trivia-card icon-card">
           <div class="t-card-header">CHINESE ZODIAC</div>
           <div class="sign-content">
@@ -588,45 +871,16 @@
           </div>
         </div>
 
-        <!-- Card 6: Birthstone & Flower -->
+        <!-- Card 5: Generation -->
         <div class="trivia-card">
-          <div class="t-card-header">BIRTHSTONE & FLOWER</div>
-          <div class="t-item-row">
-            <span class="t-role">STONE</span>
-            <span class="t-val-text">Opal</span>
-          </div>
-          <div class="t-item-row">
-            <span class="t-role">FLOWER</span>
-            <span class="t-val-text">Marigold</span>
-          </div>
+          <div class="t-card-header">YOUR GENERATION</div>
+          <div class="gen-name">Generation Z</div>
+          <p class="gen-desc">
+            Digital natives raised on YouTube, social feeds, and group chats.
+          </p>
         </div>
 
-        <!-- Card 7: Champions -->
-        <div class="trivia-card">
-          <div class="t-card-header">CHAMPIONS OF YOUR YEAR</div>
-          <div class="t-item">
-            <span class="t-role">SUPER BOWL</span>
-            <span class="t-person">Pittsburgh Steelers</span>
-          </div>
-          <div class="t-item">
-            <span class="t-role">WORLD SERIES</span>
-            <span class="t-person">St. Louis Cardinals</span>
-          </div>
-          <div class="t-item">
-            <span class="t-role">NBA FINALS</span>
-            <span class="t-person">Miami Heat</span>
-          </div>
-          <div class="t-item">
-            <span class="t-role">FIFA WORLD CUP</span>
-            <span class="t-person">Italy</span>
-          </div>
-          <div class="t-item">
-            <span class="t-role">F1 WORLD CHAMPION</span>
-            <span class="t-person">Fernando Alonso</span>
-          </div>
-        </div>
-
-        <!-- Card 8: Awards & Honours -->
+        <!-- Card 6: Awards & Honours -->
         <div class="trivia-card">
           <div class="t-card-header">AWARDS & HONOURS</div>
           <div class="t-item">
@@ -643,7 +897,7 @@
           </div>
         </div>
 
-        <!-- Card 9: Game of the Year -->
+        <!-- Card 7: Game of the Year -->
         <div class="trivia-card">
           <div class="t-card-header">GAME OF THE YEAR</div>
           <div class="pop-title">
@@ -652,13 +906,13 @@
           <div class="pop-sub">THE DEFINING GAME OF 2006</div>
         </div>
 
-        <!-- Card 10: Top Film -->
+        <!-- Card 8: Defining Films & Music -->
         <div class="trivia-card">
-          <div class="t-card-header">TOP FILM OF THE YEAR</div>
+          <div class="t-card-header">DEFINING FILMS & MUSIC OF 2006</div>
           <div class="pop-title">
-            <span class="pop-icon">🎬</span> Pirates of the Caribbean: Dead Man's Chest
+            <span class="pop-icon">🎬</span> <em>Dhoom 2</em> & <em>Mungaru Male</em>
           </div>
-          <div class="pop-metric">$1.07B worldwide</div>
+          <div class="pop-metric">Historic musical blockbusters in India & Karnataka</div>
         </div>
       </div>
 
@@ -666,245 +920,156 @@
       <div class="era-card">
         <span class="era-star">✦</span>
         <span class="era-label">THE ERA YOU JOINED</span>
-        <p class="era-text">YouTube was founded; Hurricane Katrina hit New Orleans.</p>
+        <p class="era-text">YouTube was founded; India's economy was soaring; Kannada and Indian music were creating
+          songs that would echo across decades.</p>
       </div>
     </section>
 
-    <!-- 11. A KEEPSAKE, ON US (SOCIAL STORY CARDS) -->
-    <section class="story-section card-picker-section" id="keepsake-cards-section">
-      <div class="section-label centered">A KEEPSAKE, ON US</div>
-      <h2 class="section-headline centered">Your day, as a card — free.</h2>
-      <p class="cards-subtext">
-        Save it, set it as a wallpaper, send it to someone who was there — it's yours. Sized for Instagram & TikTok
-        stories. Pick a style.
-      </p>
 
-      <div class="cards-display-row">
-        <!-- Card 1: Receipt Style -->
-        <div class="story-card-item" data-style="receipt" onclick="selectStoryCard('receipt')">
-          <div class="mini-card-preview receipt-style">
-            <div class="mini-r-header">$1.10</div>
-            <div class="mini-r-dots"></div>
-            <div class="mini-r-dots"></div>
-          </div>
-          <div class="card-style-name">RECEIPT</div>
-        </div>
 
-        <!-- Card 2: Celestial Style (Active) -->
-        <div class="story-card-item active" data-style="celestial" onclick="selectStoryCard('celestial')">
-          <div class="mini-card-preview celestial-style">
-            <div class="mini-c-date">Friday<br>October 20<br>2006</div>
-            <div class="mini-c-moon"></div>
-          </div>
-          <div class="card-style-name">CELESTIAL</div>
-        </div>
-
-        <!-- Card 3: Star Map Style -->
-        <div class="story-card-item" data-style="starmap" onclick="selectStoryCard('starmap')">
-          <div class="mini-card-preview starmap-style">
-            <div class="mini-s-circle"></div>
-            <div class="mini-s-name">Megha</div>
-          </div>
-          <div class="card-style-name">STAR MAP</div>
-        </div>
-      </div>
-
-      <div class="card-actions-row">
-        <button class="btn-gold-card" onclick="openCardPreview()">Save my card — free ↗</button>
-        <button class="btn-dark-pill" onclick="openShareDialog()">Share link →</button>
-        <button class="btn-dark-text" onclick="showToast('Compare feature coming soon!')">Compare with someone</button>
-      </div>
-    </section>
-
-    <!-- CALLOUT: YOURS ALREADY -->
-    <div class="yours-already-box">
-      <div class="yours-tag">YOURS ALREADY</div>
-      <p class="yours-text">
-        Everything above — your sky, your song, your numbers, your front page — was free, and stays free at this link.
-        No account, no catch.<br>
-        What follows is only for keeping it in finer forms.
-      </p>
-    </div>
-
-    <!-- 12. CERTIFICATE SHOWCASE & ORDER SECTION -->
+    <!-- 12. CERTIFICATE SHOWCASE -->
     <section class="story-section cert-offer-section" id="certificate-section">
       <div class="section-label centered">ISSUED IN YOUR NAME</div>
       <h2 class="section-headline centered cert-headline">
         <span class="name-insert">Megha</span>, your certificate is ready.
       </h2>
       <p class="cert-intro-text">
-        Everything above is already set into it — your sky, your weather, the song, the day. Claim it to keep the clean,
-        print-ready original and your full written story — yours forever at a private link.
+        Everything above is set into it — your sky, your weather, the song, the day. Keepsake celestial star map
+        and archival records set in gold — yours forever at this private link.
       </p>
 
-      <div class="sealed-status-card unlocked">
-        <div class="status-row">
-          <span class="status-tag green">AVAILABLE · FREE</span>
-          <span class="status-desc">your sky, your weather, your song, the front page, the receipt, and your certificate.</span>
-        </div>
-      </div>
-
-      <!-- KEEPSAKE CERTIFICATE PREVIEW -->
+      <!-- KEEPSAKE CERTIFICATE PREVIEW (OPTIMIZED SINGLE PAGE) -->
       <div class="certificate-wrapper">
         <div class="parchment-certificate" id="printable-certificate">
+          <div class="cert-corner-ornament tl">✦</div>
+          <div class="cert-corner-ornament tr">✦</div>
+          <div class="cert-corner-ornament bl">✦</div>
+          <div class="cert-corner-ornament br">✦</div>
+
           <div class="cert-border-outer">
             <div class="cert-border-inner">
 
-              <div class="cert-brand">· BORNHERE ·</div>
-              <div class="cert-subtitle">A KEEPSAKE FOR</div>
-
-              <h2 class="cert-name-display" id="cert-display-name">Megha</h2>
-
-              <div class="cert-latin">Sub eodem caelo nati sumus</div>
-              <div class="cert-latin-sub">— UNDER THE SAME SKY, WE ARE BORN —</div>
-
-              <div class="cert-body-prose">
-                <span class="name-insert">Megha</span>, you arrived on a Friday in Bidar.<br>
-                <span class="cert-micro-stats">
-                  You are roughly the <span class="gold-stat">~108-billionth</span> human ever to draw breath. One of
-                  ~379,000 babies born to the world that day — one of ~138 million born that year.
-                </span>
+              <!-- Archival Header -->
+              <div class="cert-header">
+                <div class="cert-brand">✦ OFFICIAL ARCHIVAL RECORD · BORNHERE ✦</div>
+                <div class="cert-subtitle">CELESTIAL BIRTH CERTIFICATE</div>
+                <div class="cert-rule-decor">
+                  <span class="c-rule"></span>
+                  <span class="c-star">✦</span>
+                  <span class="c-rule"></span>
+                </div>
               </div>
 
-              <div class="cert-date-large">Friday, October 20, 2006</div>
-              <div class="cert-place">Bidar, Karnataka, India</div>
-              <div class="cert-coords">17.908° N · 77.515° E</div>
+              <!-- Recipient Dedication -->
+              <div class="cert-dedication">THIS KEEPSAKE COMMEMORATES</div>
+              <h2 class="cert-name-display" id="cert-display-name">Megha</h2>
 
-              <!-- Night Sky Celestial Constellation Map -->
+              <!-- Date & Origin Coordinates -->
+              <div class="cert-date-origin">
+                <div class="cert-date-large">Friday, October 20, 2006</div>
+                <div class="cert-place-coords">Bidar, Karnataka, India · 17.908° N, 77.515° E</div>
+              </div>
+
+              <!-- Celestial Night Sky Map -->
               <div class="celestial-disc-wrapper">
                 <div class="celestial-disc">
                   <div class="disc-crosshairs"></div>
                   <canvas id="celestial-canvas" width="280" height="280"></canvas>
                 </div>
+                <div class="cert-sky-caption">Night sky overhead in Bidar at your arrival</div>
               </div>
 
-              <div class="cert-sky-caption">The sky above Bidar on that evening.</div>
+              <!-- Curated Archival Milestones (Essential Highlights) -->
+              <div class="cert-stats-grid">
+                <div class="cert-stat-pill">
+                  <span class="stat-icon">♎</span>
+                  <div class="stat-text">
+                    <span class="stat-label">SUN SIGN</span>
+                    <span class="stat-val">Libra</span>
+                  </div>
+                </div>
+                <div class="cert-stat-pill">
+                  <span class="stat-icon">🌘</span>
+                  <div class="stat-text">
+                    <span class="stat-label">MOON PHASE</span>
+                    <span class="stat-val">Waning Crescent (2%)</span>
+                  </div>
+                </div>
+                <div class="cert-stat-pill">
+                  <span class="stat-icon">🌍</span>
+                  <div class="stat-text">
+                    <span class="stat-label">HUMAN MILESTONE</span>
+                    <span class="stat-val">~108-Billionth</span>
+                  </div>
+                </div>
+                <div class="cert-stat-pill">
+                  <span class="stat-icon">☀️</span>
+                  <div class="stat-text">
+                    <span class="stat-label">THE DAY</span>
+                    <span class="stat-val">Friday · Day 293</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Footer Motto & Official Seal -->
+              <div class="cert-footer-row">
+                <div class="cert-motto-col">
+                  <div class="cert-latin">Sub eodem caelo nati sumus</div>
+                  <div class="cert-latin-sub">UNDER THE SAME SKY, WE ARE BORN</div>
+                  <div class="cert-serial">ARCHIVE REF: BID-20061020 · CERTIFIED</div>
+                </div>
+                <div class="cert-seal-col">
+                  <div class="cert-seal-emblem">
+                    <span class="seal-emblem-star">✦</span>
+                    <span class="seal-emblem-year">2006</span>
+                    <span class="seal-emblem-loc">BIDAR</span>
+                  </div>
+                </div>
+              </div>
 
             </div>
           </div>
         </div>
       </div>
 
-      <!-- OPTIONS & ACTIONS -->
+      <!-- DIRECT ACTIONS (NO MODAL) -->
       <div class="order-container">
-        <div class="name-input-group">
-          <label for="certificate-name-input" class="name-label">THE NAME ON YOUR CERTIFICATE</label>
-          <input type="text" id="certificate-name-input" value="Megha" class="cert-name-input"
-            oninput="updateName(this.value)">
-        </div>
-
-        <button class="claim-btn" onclick="openCertificateModal()">
-          Download <span class="name-insert">Megha</span>'s Certificate — Free
-        </button>
-
-        <ul class="features-list">
-          <li>
-            <strong>The keepsake certificate</strong> — a print-ready celestial star map of your exact night sky, set
-            with your name in gold — print it, frame it, hang it.
-          </li>
-          <li>
-            <strong>Your written story</strong> — your exact day composed into words, not just data — yours to keep.
-          </li>
-          <li>
-            <strong>Celestial coordinates</strong> — the cosmos through astronomical records, and the night sky over Bidar.
-          </li>
-          <li>
-            <strong>A private link, forever</strong> — no account, no subscription — it's yours for good.
-          </li>
-        </ul>
-
-        <p class="features-summary">
-          Dozens of verified details about your day — the <strong>#1 song</strong>, the <strong>weather</strong>, the
-          <strong>moon overhead</strong>, the <strong>headlines</strong> — every figure <strong>sourced and
-            dated</strong>, nothing invented.
-        </p>
-
-        <!-- Accuracy Promise Box -->
-        <div class="accuracy-promise-box">
-          <div class="accuracy-tag">THE ACCURACY PROMISE</div>
-          <p class="accuracy-text">
-            Every figure on your certificate is <strong>sourced and dated</strong> to your exact day — verified against astronomical records and historical archives.
-          </p>
-          <div class="accuracy-sources">
-            NASA · OPEN-METEO · BILLBOARD · LIBRARY OF CONGRESS
+        <!-- Elegant Name Personalizer Card -->
+        <div class="cert-customizer-box">
+          <div class="customizer-label-row">
+            <span class="customizer-icon">✦</span>
+            <label for="certificate-name-input" class="customizer-label">NAME ON CERTIFICATE</label>
+            <span class="customizer-icon">✦</span>
           </div>
+          <div class="customizer-input-wrapper">
+            <input type="text" id="certificate-name-input" value="Megha" class="cert-name-input"
+              placeholder="Enter name..." autocomplete="off" spellcheck="false"
+              oninput="updateName(this.value)">
+          </div>
+          <p class="customizer-hint">Type any name to personalize your keepsake in real time</p>
         </div>
 
-        <!-- Trust Badges -->
-        <div class="trust-badges-row">
-          <span>✓ 100% Free Keepsake</span>
-          <span>✓ High-Res Print-Ready</span>
-          <span>✓ Verified Historical Records</span>
-        </div>
+        <!-- Download Action -->
+        <button class="claim-btn" id="claim-cert-btn" onclick="downloadCertificate()">
+          <span class="btn-icon">↓</span> Download <span class="name-insert">Megha</span>’s Certificate
+        </button>
       </div>
     </section>
 
-    <!-- 13. KEEP THIS MOMENT (SAVE FOR LATER) -->
-    <section class="save-moment-section">
-      <div class="save-moment-card">
-        <button class="save-close-btn" onclick="this.closest('.save-moment-card').style.display='none'">✕</button>
-        <div class="save-moment-left">
-          <div class="save-tag">KEEP THIS MOMENT</div>
-          <h3 class="save-title">Save Friday, October 20, 2006 so you can come back to it.</h3>
-          <p class="save-desc">
-            Your <strong>10,000 days</strong> lands on <strong>Tuesday, March 7, 2034</strong>. Drop your email and this
-            day will still be here. No spam — just this.
-          </p>
-        </div>
-
-        <div class="save-moment-right">
-          <form onsubmit="handleSaveForm(event)">
-            <div class="form-group">
-              <label for="save-name-input">NAME (OPTIONAL)</label>
-              <input type="text" id="save-name-input" value="Megha" class="save-input">
-            </div>
-
-            <div class="form-group">
-              <label for="save-email-input">EMAIL</label>
-              <input type="email" id="save-email-input" placeholder="you@example.com" required class="save-input">
-            </div>
-
-            <button type="submit" class="save-submit-btn">Save my day</button>
-            <div class="save-later-link" onclick="this.closest('.save-moment-card').style.display='none'">MAYBE LATER
-            </div>
-            <p class="save-privacy-text">
-              By continuing you agree to our <a href="#">privacy policy</a>.
-            </p>
-          </form>
-        </div>
+    <!-- 12. PAGE FOOTER -->
+    <footer class="page-footer">
+      <div class="footer-divider">
+        <span class="divider-line"></span>
+        <span class="divider-star">✦</span>
+        <span class="divider-line"></span>
       </div>
-    </section>
-
-    <!-- 14. FOOTER -->
-    <footer class="site-footer">
-      <nav class="footer-nav">
-        <a href="#">BornHere</a>
-        <a href="#">Compare</a>
-        <a href="#">Gift</a>
-        <a href="#">Pricing</a>
-        <a href="#">Refunds</a>
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="#">Contact</a>
-      </nav>
-      <div class="footer-tagline">MADE FOR THE DAY YOU ARRIVED</div>
+      <p class="footer-signoff">From Your friend</p>
+      <p class="footer-subtext">Made for <span class="name-insert">Megha</span> · Friday, October 20, 2006</p>
     </footer>
 
   </main>
 
-  <!-- STICKY BOTTOM BANNER -->
-  <aside class="sticky-bottom-banner" id="bottom-banner">
-    <div class="banner-content">
-      <div class="banner-text">
-        <span class="banner-main"><span class="name-insert">Megha</span> arrived. Keep the whole day.</span>
-        <span class="banner-sub">The #1 song that day was "SexyBack." Keep it, and all of it.</span>
-      </div>
-      <div class="banner-actions">
-        <a href="#certificate-section" class="banner-btn">View Certificate</a>
-        <button class="banner-close-btn" onclick="dismissBanner()" aria-label="Close banner">✕</button>
-      </div>
-    </div>
-  </aside>
+
 
   <!-- FLOATING ACTION BUTTONS -->
   <div class="floating-controls">
@@ -912,40 +1077,6 @@
     <button class="scroll-top-btn" id="scroll-top-btn" onclick="scrollToTop()" aria-label="Scroll to top">
       ↑
     </button>
-    <!-- Support Chat -->
-    <button class="chat-fab-btn" id="chat-fab" onclick="toggleChatModal()" aria-label="Open support chat">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path
-          d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719">
-        </path>
-      </svg>
-    </button>
-  </div>
-
-  <!-- SUPPORT CHAT MODAL -->
-  <div class="chat-modal" id="chat-modal">
-    <div class="chat-modal-header">
-      <div class="chat-header-info">
-        <div class="chat-avatar">★</div>
-        <div>
-          <div class="chat-title">BornHere Concierge</div>
-          <div class="chat-subtitle">Verified Astrological & Historical Archivist</div>
-        </div>
-      </div>
-      <button class="chat-close-btn" onclick="toggleChatModal()">✕</button>
-    </div>
-    <div class="chat-modal-body" id="chat-messages">
-      <div class="chat-bubble bot">
-        Hello! I can answer questions about Megha's day: Friday, October 20, 2006 in Bidar, Karnataka. How can I help
-        you today?
-      </div>
-    </div>
-    <form class="chat-modal-input-area" onsubmit="sendChatMessage(event)">
-      <input type="text" id="chat-user-input" placeholder="Ask about the weather, moon, or certificate..."
-        autocomplete="off">
-      <button type="submit" class="chat-send-btn">Send</button>
-    </form>
   </div>
 
   <!-- SHARE DIALOG MODAL -->
@@ -970,61 +1101,18 @@
     </div>
   </div>
 
-  <!-- STORY CARD MODAL (9:16 INSTAGRAM / TIKTOK STORY PREVIEW) -->
-  <div class="modal-backdrop" id="story-card-modal" onclick="if(event.target===this) closeCardPreview()">
-    <div class="modal-box story-modal-box">
-      <div class="modal-header">
-        <h3>Your Story Card</h3>
-        <button class="modal-close" onclick="closeCardPreview()">✕</button>
-      </div>
-      <div class="modal-body story-modal-body">
-        <div class="story-preview-container">
-          <div class="story-canvas-card" id="active-story-card">
-            <!-- Dynamic card content inserted by script.js -->
-          </div>
-        </div>
-        <div class="story-modal-controls">
-          <div class="style-toggle-buttons">
-            <button class="style-btn" id="modal-btn-receipt" onclick="selectStoryCard('receipt')">Receipt</button>
-            <button class="style-btn" id="modal-btn-celestial" onclick="selectStoryCard('celestial')">Celestial</button>
-            <button class="style-btn" id="modal-btn-starmap" onclick="selectStoryCard('starmap')">Star Map</button>
-          </div>
-          <div class="story-download-buttons">
-            <button class="btn-gold-card" onclick="downloadStoryCardImage()">Save Story Card (PNG) ↗</button>
-            <button class="btn-dark-pill" onclick="closeCardPreview()">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- CERTIFICATE DOWNLOAD / PRINT MODAL -->
-  <div class="modal-backdrop" id="certificate-modal" onclick="if(event.target===this) closeCertificateModal()">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3><span class="name-insert">Megha</span>'s Keepsake Certificate</h3>
-        <button class="modal-close" onclick="closeCertificateModal()">✕</button>
-      </div>
-      <div class="modal-body">
-        <p style="font-size: 14px; color: var(--text-soft); margin-bottom: 20px;">
-          Your official certificate for Friday, October 20, 2006 in Bidar, Karnataka is ready with all astronomical and historical data.
-        </p>
-        <div class="cert-modal-actions">
-          <button class="btn-gold-card" style="width: 100%; margin-bottom: 12px;" onclick="printCertificate()">
-            Print / Save as PDF ↗
-          </button>
-          <button class="btn-dark-pill" style="width: 100%;" onclick="scrollToCertificate()">
-            View Full-Size Certificate
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+
+
 
   <!-- TOAST NOTIFICATION -->
   <div class="toast-popup" id="toast-popup"></div>
 
+  <script src="html2canvas.min.js"></script>
   <script src="script.js"></script>
+  <script src="starfield-animation.js"></script>
+  <script src="envelope-animation.js"></script>
+  <script src="timewarp-animation.js"></script>
 </body>
 
 </html>

@@ -10,63 +10,8 @@ const BIRTH_DATE = new Date('2006-10-20T00:00:00+05:30');
 const BASE_HEARTBEATS = 756201622;
 let heartbeatCount = BASE_HEARTBEATS;
 
-// --------------------------------------------------------------------------
-// 1. STARFIELD CANVAS ANIMATION
-// --------------------------------------------------------------------------
-const starsCanvas = document.getElementById('stars-canvas');
-const ctxStars = starsCanvas.getContext('2d');
+// Note: Starfield Canvas Animation moved to starfield-animation.js
 
-let stars = [];
-const STAR_COUNT = 140;
-
-function resizeStarsCanvas() {
-  starsCanvas.width = window.innerWidth;
-  starsCanvas.height = window.innerHeight;
-  initStars();
-}
-
-function initStars() {
-  stars = [];
-  for (let i = 0; i < STAR_COUNT; i++) {
-    stars.push({
-      x: Math.random() * starsCanvas.width,
-      y: Math.random() * starsCanvas.height,
-      radius: Math.random() * 1.4 + 0.4,
-      alpha: Math.random() * 0.8 + 0.2,
-      twinkleSpeed: Math.random() * 0.02 + 0.005,
-      direction: Math.random() > 0.5 ? 1 : -1,
-      color: Math.random() > 0.3 ? '#f5f2eb' : '#e5b85c'
-    });
-  }
-}
-
-function renderStars() {
-  ctxStars.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
-
-  for (let star of stars) {
-    star.alpha += star.twinkleSpeed * star.direction;
-    if (star.alpha >= 0.95) {
-      star.alpha = 0.95;
-      star.direction = -1;
-    } else if (star.alpha <= 0.15) {
-      star.alpha = 0.15;
-      star.direction = 1;
-    }
-
-    ctxStars.beginPath();
-    ctxStars.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-    ctxStars.fillStyle = star.color;
-    ctxStars.globalAlpha = star.alpha;
-    ctxStars.fill();
-  }
-
-  ctxStars.globalAlpha = 1;
-  requestAnimationFrame(renderStars);
-}
-
-window.addEventListener('resize', resizeStarsCanvas);
-resizeStarsCanvas();
-renderStars();
 
 // --------------------------------------------------------------------------
 // 2. CELESTIAL CONSTELLATION MAP (CERTIFICATE CANVAS)
@@ -288,25 +233,39 @@ function updateName(newName) {
 }
 
 // --------------------------------------------------------------------------
-// 5. INTERACTIVE STORY CARDS PICKER
+// 5. SOUNDTRACK CATEGORY FILTER
 // --------------------------------------------------------------------------
-let selectedStyle = 'celestial';
-
-function selectStoryCard(styleName) {
-  selectedStyle = styleName;
-  const cards = document.querySelectorAll('.story-card-item');
-  cards.forEach(card => {
-    if (card.getAttribute('data-style') === styleName) {
-      card.classList.add('active');
+function filterMusic(category) {
+  const buttons = document.querySelectorAll('.music-filter-btn');
+  buttons.forEach(btn => {
+    if (btn.getAttribute('data-filter') === category) {
+      btn.classList.add('active');
     } else {
-      card.classList.remove('active');
+      btn.classList.remove('active');
     }
   });
-  showToast(`Selected style: ${styleName.toUpperCase()}`);
-}
 
-function openCardPreview() {
-  showToast(`Preparing free ${selectedStyle.toUpperCase()} card for download...`);
+  const cards = document.querySelectorAll('.music-card');
+  cards.forEach(card => {
+    const cardCat = card.getAttribute('data-category');
+    const isFeatured = card.getAttribute('data-featured') === 'true';
+
+    if (category === 'all') {
+      // In Top / All mode, show only the 3 top featured songs (1 Global, 1 Hindi, 1 Kannada)
+      if (isFeatured) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    } else {
+      // In specific category mode, show all 3 songs of that category
+      if (cardCat === category) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    }
+  });
 }
 
 // --------------------------------------------------------------------------
@@ -359,60 +318,133 @@ function showToast(message) {
 }
 
 // --------------------------------------------------------------------------
-// 7. ORDER / CLAIM CERTIFICATE MODAL
+// 7. DIRECT CERTIFICATE ACTIONS (DOWNLOAD & 1-PAGE PRINT)
 // --------------------------------------------------------------------------
-function openClaimModal() {
-  const modal = document.getElementById('claim-modal');
-  if (modal) modal.classList.add('open');
+
+function drawCanvasRoundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
 }
 
-function closeClaimModal() {
-  const modal = document.getElementById('claim-modal');
-  if (modal) modal.classList.remove('open');
-}
+async function downloadCertificate() {
+  const nameInput = document.getElementById('certificate-name-input');
+  const name = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : 'Megha';
+  const claimBtn = document.getElementById('claim-cert-btn');
+  const certElement = document.getElementById('printable-certificate');
 
-function simulatePaymentSuccess() {
-  closeClaimModal();
-  showToast('✓ Payment verified! Your certificate is unlocked.');
+  if (!certElement) return;
 
-  // Unlock certificate visually: fade out lock overlay
-  const overlay = document.querySelector('.cert-locked-overlay');
-  if (overlay) {
-    overlay.style.transition = 'opacity 0.8s ease';
-    overlay.style.opacity = '0';
-    setTimeout(() => {
-      overlay.style.display = 'none';
-    }, 800);
+  if (claimBtn) {
+    claimBtn.innerHTML = '<span class="btn-icon">⏳</span> Capturing Certificate...';
+    claimBtn.style.pointerEvents = 'none';
+  }
+
+  try {
+    // Redraw celestial sky map to ensure canvas buffer is fresh
+    if (typeof drawCelestialSkyMap === 'function') {
+      drawCelestialSkyMap();
+    }
+
+    // Wait for web fonts to be completely ready
+    if (document.fonts && document.fonts.ready) {
+      await document.fonts.ready;
+    }
+
+    let canvas;
+    if (typeof html2canvas === 'function') {
+      canvas = await html2canvas(certElement, {
+        scale: 3, // Ultra-sharp 3x retina capture of the exact certificate shown
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#faf7ee',
+        logging: false,
+        onclone: (clonedDoc) => {
+          const clonedCert = clonedDoc.getElementById('printable-certificate');
+          if (clonedCert) {
+            clonedCert.style.width = '480px';
+            clonedCert.style.maxWidth = '480px';
+            clonedCert.style.boxShadow = 'none';
+            clonedCert.style.transform = 'none';
+            clonedCert.style.margin = '0 auto';
+          }
+        }
+      });
+    } else {
+      throw new Error('html2canvas library unavailable');
+    }
+
+    const fileName = `${name.replace(/\s+/g, '_')}_Keepsake_Certificate.png`;
+
+    canvas.toBlob((blob) => {
+      let downloadUrl;
+      if (blob) {
+        downloadUrl = URL.createObjectURL(blob);
+      } else {
+        downloadUrl = canvas.toDataURL('image/png');
+      }
+
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      if (blob) {
+        setTimeout(() => URL.revokeObjectURL(downloadUrl), 3000);
+      }
+
+      if (claimBtn) {
+        claimBtn.innerHTML = '<span class="btn-icon">✓</span> Certificate Downloaded!';
+        claimBtn.style.pointerEvents = '';
+        setTimeout(() => {
+          claimBtn.innerHTML = `<span class="btn-icon">↓</span> Download <span class="name-insert">${name}</span>’s Certificate`;
+        }, 3000);
+      }
+    }, 'image/png', 1.0);
+
+  } catch (err) {
+    console.error('Error generating certificate image:', err);
+    if (claimBtn) {
+      claimBtn.innerHTML = '<span class="btn-icon">⚠️</span> Error downloading';
+      claimBtn.style.pointerEvents = '';
+      setTimeout(() => {
+        claimBtn.innerHTML = `<span class="btn-icon">↓</span> Download <span class="name-insert">${name}</span>’s Certificate`;
+      }, 2500);
+    }
   }
 }
 
-// --------------------------------------------------------------------------
-// 8. SAVE FOR LATER FORM
-// --------------------------------------------------------------------------
-function handleSaveForm(e) {
-  e.preventDefault();
-  const emailInput = document.getElementById('save-email-input');
-  const email = emailInput ? emailInput.value : '';
-  showToast(`Moment saved! Reminder sent to ${email}`);
-  const card = document.querySelector('.save-moment-card');
-  if (card) {
-    card.innerHTML = `
-      <div style="text-align: center; width: 100%; padding: 20px;">
-        <div style="font-size: 28px; color: var(--gold-primary); margin-bottom: 8px;">✓</div>
-        <div style="font-family: var(--font-serif); font-size: 24px; color: var(--text-main); margin-bottom: 6px;">Moment Saved</div>
-        <p style="font-size: 13px; color: var(--text-soft);">We will send a milestone reminder on Tuesday, March 7, 2034.</p>
-      </div>
-    `;
-  }
+function printCertificate() {
+  window.print();
+}
+
+function openCertificateModal() {
+  // Directly trigger certificate download without opening any modal
+  downloadCertificate();
+}
+
+function closeCertificateModal() {
+  // No-op (modal eliminated)
+}
+
+function scrollToCertificate() {
+  const cert = document.getElementById('certificate-section');
+  if (cert) cert.scrollIntoView({ behavior: 'smooth' });
 }
 
 // --------------------------------------------------------------------------
-// 9. STICKY BOTTOM BANNER & SCROLL LISTENER
+// 9. SCROLL TO TOP LISTENER
 // --------------------------------------------------------------------------
-function dismissBanner() {
-  const banner = document.getElementById('bottom-banner');
-  if (banner) banner.style.display = 'none';
-}
 
 const scrollTopBtn = document.getElementById('scroll-top-btn');
 
@@ -429,52 +461,14 @@ function scrollToTop() {
 }
 
 // --------------------------------------------------------------------------
-// 10. SUPPORT CHAT CONCIERGE
+// 10. SECRET MOON WHISPER INTERACTION
 // --------------------------------------------------------------------------
-function toggleChatModal() {
-  const modal = document.getElementById('chat-modal');
-  if (modal) {
-    modal.classList.toggle('open');
-  }
-}
+const moonShowcaseEl = document.querySelector('.moon-showcase');
+if (moonShowcaseEl) {
+  moonShowcaseEl.addEventListener('click', () => {
+    moonShowcaseEl.classList.toggle('revealed');
+  });
+}// Note: Birthday Letter & Envelope Intro Animation moved to envelope-animation.js
 
-function sendChatMessage(e) {
-  e.preventDefault();
-  const input = document.getElementById('chat-user-input');
-  const text = input ? input.value.trim() : '';
-  if (!text) return;
 
-  const messagesContainer = document.getElementById('chat-messages');
 
-  // User bubble
-  const userBubble = document.createElement('div');
-  userBubble.className = 'chat-bubble user';
-  userBubble.textContent = text;
-  messagesContainer.appendChild(userBubble);
-  input.value = '';
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-  // Bot response logic
-  setTimeout(() => {
-    let reply = "I'm happy to help! Every detail for Friday, October 20, 2006 in Bidar is sourced from NASA, Open-Meteo, Billboard archives, and historical logs.";
-    const lower = text.toLowerCase();
-
-    if (lower.includes('weather') || lower.includes('temperature') || lower.includes('rain')) {
-      reply = "On October 20, 2006, Bidar, Karnataka experienced partly cloudy skies with a high of 84°F (28.8°C), low of 65°F (18.1°C), 10 km/h gentle wind, and 0.0 mm precipitation.";
-    } else if (lower.includes('moon') || lower.includes('phase')) {
-      reply = "The moon was a delicate Waning Crescent with just 3% illumination hanging over Bidar. Sunrise occurred at 06:14 and sunset at 17:54.";
-    } else if (lower.includes('song') || lower.includes('music') || lower.includes('billboard')) {
-      reply = "The #1 Billboard Hot 100 hit that week was 'SexyBack' by Justin Timberlake (week of October 14, 2006).";
-    } else if (lower.includes('price') || lower.includes('cost') || lower.includes('refund')) {
-      reply = "The keepsake certificate is ₹99 (normally ₹299). It includes a full 14-day refund guarantee with no forms required.";
-    } else if (lower.includes('sensex') || lower.includes('market') || lower.includes('stock')) {
-      reply = "The BSE Sensex closed at 12,709 on Megha's birthday and has grown 5.7× (up 472%) to over 72,639 today!";
-    }
-
-    const botBubble = document.createElement('div');
-    botBubble.className = 'chat-bubble bot';
-    botBubble.textContent = reply;
-    messagesContainer.appendChild(botBubble);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  }, 400);
-}

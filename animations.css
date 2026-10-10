@@ -1,0 +1,1206 @@
+/* ==========================================================================
+   BornHere — Megha (Friday, October 20, 2006 · Bidar, Karnataka, India)
+   Dedicated Animations & Interactive Motion Stylesheet (Slower & Smoother)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. AMBIENT & COMPONENT KEYFRAMES
+   -------------------------------------------------------------------------- */
+
+/* Cassette Tape Spinning Reel — smooth continuous reel */
+.cassette-reel {
+  animation: spinReel 7.5s linear infinite;
+}
+
+@keyframes spinReel {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Real-Time Heartbeat Pulse — gentle cardiac rhythm */
+.heart-pulse {
+  animation: pulseBeat 1.4s infinite ease-in-out;
+}
+
+@keyframes pulseBeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.24);
+    color: #ff5e7e;
+  }
+  50% {
+    transform: scale(1.08);
+  }
+  65% {
+    transform: scale(1.18);
+    color: #ff5e7e;
+  }
+}
+
+/* Market Live Chart Pulse Dot — calm breathing radar pulse */
+.chart-end-dot {
+  animation: pulseDot 2.8s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0%, 100% {
+    r: 5;
+    fill: var(--gold-light, #f8d688);
+    opacity: 0.8;
+  }
+  50% {
+    r: 7.2;
+    fill: #ffffff;
+    opacity: 1;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   2. BIRTHDAY LETTER & ENVELOPE INTRO ANIMATION
+   -------------------------------------------------------------------------- */
+
+body.letter-locked {
+  overflow: hidden !important;
+}
+
+/* Full-Screen Letter Overlay Backdrop */
+.letter-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+  opacity: 1;
+  transition: opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1), transform 1.0s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.letter-overlay.dismissed {
+  opacity: 0;
+  transform: scale(1.03) translateY(-14px);
+  pointer-events: none;
+}
+
+.letter-backdrop {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(6, 11, 24, 0.92) 0%, rgba(2, 4, 12, 0.98) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 1;
+}
+
+.letter-stage {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 540px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  perspective: 1400px;
+  margin: auto;
+}
+
+/* Floating Envelope Presentation */
+.envelope-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  height: 250px;
+  cursor: pointer;
+  transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: floatEnvelope 6.5s ease-in-out infinite;
+}
+
+@keyframes floatEnvelope {
+  0%, 100% {
+    transform: translateY(0) rotateX(0deg) rotateZ(0deg);
+  }
+  50% {
+    transform: translateY(-9px) rotateX(2deg) rotateZ(-0.4deg);
+  }
+}
+
+.envelope-wrapper:hover:not(.is-opening):not(.is-opened):not(.stage-unfolded) {
+  transform: translateY(-8px) scale(1.025);
+}
+
+.envelope-wrapper.is-opening {
+  animation: none;
+}
+
+.envelope-wrapper.stage-unfolded {
+  animation: none;
+  cursor: default;
+  max-width: 520px;
+  height: auto;
+}
+
+/* Envelope Hint Label */
+.envelope-hint {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--gold-primary, #e5b85c);
+  text-align: center;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-shadow: 0 0 14px rgba(229, 184, 92, 0.45);
+  animation: pulseHint 3.6s ease-in-out infinite;
+  transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes pulseHint {
+  0%, 100% {
+    opacity: 0.75;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 20px rgba(229, 184, 92, 0.8);
+    transform: translateY(-2px);
+  }
+}
+
+.hint-sparkle {
+  font-size: 12px;
+  color: var(--gold-light, #f8d688);
+}
+
+.envelope-wrapper.is-opening .envelope-hint,
+.envelope-wrapper.is-opened .envelope-hint {
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  height: 0;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+/* Envelope Container */
+.envelope {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  transform-style: preserve-3d;
+}
+
+.envelope-wrapper.stage-unfolded .envelope {
+  height: auto;
+}
+
+.envelope-back {
+  position: absolute;
+  inset: 0;
+  background: #080f20;
+  border-radius: 12px;
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(59, 130, 246, 0.12);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.envelope-wrapper.stage-unfolded .envelope-back {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Flap & Pockets — 3D Mechanical Motion & Solid Seam Overlap */
+.envelope-pocket-liner {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #122044 0%, #0a142c 100%);
+  border-radius: 12px;
+  z-index: 3;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+
+.envelope-wrapper.stage-unfolded .envelope-pocket-liner {
+  opacity: 0;
+}
+
+.envelope-flap-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 148px;
+  background: linear-gradient(180deg, #182c58 0%, #0e1c3a 100%);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center;
+  transition: transform 1.2s cubic-bezier(0.35, 0, 0.25, 1), z-index 0.05s linear 0.55s, opacity 0.8s ease, filter 1.2s ease;
+  z-index: 6;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.6));
+  border-top: 1px solid rgba(229, 184, 92, 0.35);
+}
+
+.envelope-wrapper.is-opened .envelope-flap-top {
+  transform: rotateX(180deg);
+  z-index: 1;
+  filter: drop-shadow(0 -4px 8px rgba(0, 0, 0, 0.25));
+}
+
+.envelope-wrapper.stage-unfolded .envelope-flap-top {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.envelope-pocket-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 148px;
+  background: linear-gradient(0deg, #14254b 0%, #0b152d 100%);
+  clip-path: polygon(0 100%, 100% 100%, 50% 6%);
+  z-index: 5;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  border-bottom: 1px solid rgba(229, 184, 92, 0.25);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  filter: drop-shadow(0 -4px 12px rgba(0, 0, 0, 0.4));
+}
+
+.envelope-pocket-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 56%;
+  height: 100%;
+  background: linear-gradient(90deg, #122246 0%, #0d1934 100%);
+  clip-path: polygon(0 0, 0 100%, 100% 50%);
+  z-index: 4;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.envelope-pocket-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 56%;
+  height: 100%;
+  background: linear-gradient(-90deg, #122246 0%, #0d1934 100%);
+  clip-path: polygon(100% 0, 100% 100%, 0 50%);
+  z-index: 4;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.envelope-wrapper.stage-unfolded .envelope-pocket-bottom,
+.envelope-wrapper.stage-unfolded .envelope-pocket-left,
+.envelope-wrapper.stage-unfolded .envelope-pocket-right {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Wax Seal with Gold Ripple & Shimmer */
+.envelope-seal {
+  position: absolute;
+  top: 116px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffd978 0%, #d4a040 50%, #9e7020 100%);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.6), inset 0 -2px 4px rgba(0, 0, 0, 0.6), 0 6px 22px rgba(212, 160, 64, 0.6);
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.6s ease;
+}
+
+.seal-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.seal-star {
+  font-size: 11px;
+  color: #fff9e6;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.seal-num {
+  font-family: var(--font-serif, serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: #2b1f0c;
+  margin-top: 1px;
+}
+
+.envelope-wrapper:hover:not(.is-opened) .envelope-seal {
+  transform: translate(-50%, -50%) scale(1.08);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.7), inset 0 -2px 4px rgba(0, 0, 0, 0.6), 0 8px 30px rgba(229, 184, 92, 0.75);
+}
+
+.envelope-wrapper.is-opening .envelope-seal {
+  transform: translate(-50%, -50%) scale(1.25);
+  opacity: 0;
+  box-shadow: 0 0 35px rgba(229, 184, 92, 0.9), inset 0 0 15px rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+}
+
+.envelope-wrapper.stage-unfolded .envelope-seal {
+  display: none;
+}
+
+/* Letter Sheet — Extraction & Unfolding Choreography (Warm Lighter Parchment) */
+.letter-sheet {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: 15px;
+  height: 200px;
+  background: linear-gradient(168deg, #fffefc 0%, #faf4e8 50%, #f3e9d2 100%);
+  border: 1px solid rgba(212, 168, 75, 0.45);
+  border-radius: 8px;
+  z-index: 2;
+  overflow: hidden;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease, box-shadow 0.8s ease;
+  opacity: 0;
+  visibility: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+}
+
+/* Phase 3: Smooth Vertical Extraction out of Envelope Pocket */
+.envelope-wrapper.is-rising .letter-sheet,
+.envelope-wrapper.is-opened.is-rising .letter-sheet {
+  transform: translateY(-170px);
+  z-index: 8;
+  opacity: 1;
+  visibility: visible;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(229, 184, 92, 0.2);
+}
+
+/* Phase 4: Stage Unfolded Reading Card — Luxurious Warm Ivory & Cream Parchment */
+.envelope-wrapper.stage-unfolded .letter-sheet {
+  position: relative;
+  left: auto;
+  right: auto;
+  top: auto;
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  z-index: 20;
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+  background: linear-gradient(168deg, #fffefb 0%, #fcf7ec 35%, #f6edd7 80%, #eee1c4 100%);
+  border: 1px solid rgba(194, 149, 58, 0.5);
+  border-radius: 18px;
+  padding: 42px 34px 38px;
+  box-shadow: 0 35px 95px rgba(0, 0, 0, 0.85), 0 0 60px rgba(229, 184, 92, 0.28), inset 0 0 55px rgba(229, 184, 92, 0.08);
+  animation: popUnfold 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes popUnfold {
+  0% {
+    transform: scale(0.93) translateY(24px);
+    opacity: 0;
+    filter: blur(4px);
+  }
+  60% {
+    filter: blur(0px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+.letter-sheet::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(184, 137, 45, 0.25);
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+/* Staggered Content Reveal Delays */
+.envelope-wrapper.stage-unfolded .letter-badge {
+  animation: letterItemFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s backwards;
+}
+
+.envelope-wrapper.stage-unfolded .letter-salutation {
+  animation: letterItemFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.28s backwards;
+}
+
+.envelope-wrapper.stage-unfolded .letter-heading {
+  animation: letterItemFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.40s backwards;
+}
+
+.envelope-wrapper.stage-unfolded .letter-divider {
+  animation: letterItemFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.52s backwards;
+}
+
+.envelope-wrapper.stage-unfolded .letter-content .letter-verse:nth-child(1) {
+  animation: letterItemFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.65s backwards;
+}
+
+.envelope-wrapper.stage-unfolded .letter-content .letter-verse:nth-child(2) {
+  animation: letterItemFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.78s backwards;
+}
+
+.envelope-wrapper.stage-unfolded .letter-content .letter-verse:nth-child(3) {
+  animation: letterItemFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.90s backwards;
+}
+
+.envelope-wrapper.stage-unfolded .letter-welcome-box {
+  animation: letterItemFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 1.05s backwards;
+}
+
+.envelope-wrapper.stage-unfolded .letter-close-btn {
+  animation: letterItemFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 1.20s backwards;
+}
+
+@keyframes letterItemFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Corner Ornaments */
+.letter-corner-ornament {
+  position: absolute;
+  font-size: 11px;
+  color: #b88622;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+.letter-corner-ornament.tl { top: 16px; left: 16px; }
+.letter-corner-ornament.tr { top: 16px; right: 16px; }
+.letter-corner-ornament.bl { bottom: 16px; left: 16px; }
+.letter-corner-ornament.br { bottom: 16px; right: 16px; }
+
+/* Letter Inner Typography on Lighter Parchment */
+.letter-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+
+.envelope-wrapper:not(.is-rising):not(.stage-unfolded) .letter-inner {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.letter-badge {
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  color: #8c6418;
+  background: rgba(184, 137, 45, 0.12);
+  border: 1px solid rgba(184, 137, 45, 0.25);
+  border-radius: 20px;
+  display: inline-block;
+  padding: 5px 16px;
+  margin-bottom: 18px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.letter-salutation {
+  font-family: var(--font-serif, serif);
+  font-size: 35px;
+  font-weight: 500;
+  font-style: italic;
+  color: #1a1612;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.letter-heading {
+  font-family: var(--font-serif, serif);
+  font-size: 42px;
+  font-weight: 600;
+  color: #b88622;
+  text-shadow: 0 1px 3px rgba(184, 134, 34, 0.2);
+  margin-bottom: 16px;
+  line-height: 1.15;
+}
+
+.letter-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 18px auto 26px;
+  max-width: 200px;
+}
+
+.divider-line {
+  flex-grow: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(184, 137, 45, 0.45), transparent);
+}
+
+.divider-star {
+  font-size: 11px;
+  color: #b88622;
+}
+
+.letter-content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 26px;
+}
+
+.letter-verse {
+  font-family: var(--font-serif, serif);
+  font-size: 21px;
+  font-style: italic;
+  line-height: 1.6;
+  color: #2b2319;
+  letter-spacing: 0.01em;
+  text-shadow: none;
+}
+
+/* Welcome to 20s Box on Lighter Background */
+.letter-welcome-box {
+  background: linear-gradient(135deg, rgba(248, 230, 184, 0.45) 0%, rgba(244, 219, 155, 0.25) 100%);
+  border: 1px solid rgba(184, 137, 45, 0.4);
+  border-radius: 14px;
+  padding: 18px 24px;
+  margin: 0 auto 20px;
+  max-width: 360px;
+  box-shadow: 0 8px 24px rgba(184, 137, 45, 0.12);
+}
+
+.welcome-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 9.5px;
+  letter-spacing: 0.28em;
+  color: #8c6418;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.welcome-title {
+  font-family: var(--font-mono, monospace);
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #5c3e08;
+  text-shadow: none;
+}
+
+/* Enter Button */
+.letter-close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 290px;
+  padding: 15px 30px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #e5b85c 0%, #f8d688 50%, #d4a040 100%);
+  color: #070b14;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 26px rgba(229, 184, 92, 0.35);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.letter-close-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 14px 36px rgba(229, 184, 92, 0.6);
+}
+
+.btn-arrow {
+  font-size: 16px;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.letter-close-btn:hover .btn-arrow {
+  transform: translateY(3px);
+}
+
+/* Sparkle Particles — Floaty Celestial Drift */
+.letter-sparkle-particle {
+  position: absolute;
+  width: var(--size, 4px);
+  height: var(--size, 4px);
+  border-radius: 50%;
+  background: var(--color, var(--gold-light, #f8d688));
+  box-shadow: 0 0 14px var(--gold-primary, #e5b85c), 0 0 4px #ffffff;
+  pointer-events: none;
+  animation: letterSparkleBurst 2.0s cubic-bezier(0.12, 0.9, 0.26, 1) forwards;
+}
+
+@keyframes letterSparkleBurst {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.3);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(calc(var(--tx) * 0.25), calc(var(--ty) * 0.25 - 6px)) scale(1.3);
+  }
+  60% {
+    opacity: 0.85;
+    transform: translate(calc(var(--tx) * 0.75), calc(var(--ty) * 0.75 + 8px)) scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), calc(var(--ty) + 26px)) scale(0.15);
+  }
+}
+
+/* Reopen Pill in Hero Header */
+.hero-letter-pill-wrap {
+  margin: 18px 0 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-letter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border-radius: 24px;
+  background: rgba(229, 184, 92, 0.1);
+  border: 1px solid rgba(229, 184, 92, 0.35);
+  color: var(--gold-light, #f8d688);
+  font-family: var(--font-mono, monospace);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.hero-letter-pill:hover {
+  background: rgba(229, 184, 92, 0.22);
+  border-color: var(--gold-primary, #e5b85c);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(229, 184, 92, 0.3);
+}
+
+.pill-icon {
+  font-size: 13px;
+  color: var(--gold-primary, #e5b85c);
+}
+
+@media (max-width: 520px) {
+  .envelope-wrapper {
+    max-width: 326px;
+    height: 224px;
+  }
+  .envelope {
+    height: 214px;
+  }
+  .envelope-flap-top {
+    height: 132px;
+  }
+  .envelope-pocket-bottom {
+    height: 132px;
+  }
+  .envelope-seal {
+    top: 104px;
+    width: 54px;
+    height: 54px;
+  }
+  .seal-num {
+    font-size: 14px;
+  }
+  .envelope-wrapper.stage-unfolded .letter-sheet {
+    padding: 30px 18px 24px;
+  }
+  .letter-salutation {
+    font-size: 26px;
+  }
+  .letter-heading {
+    font-size: 28px;
+  }
+  .letter-verse {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .welcome-title {
+    font-size: 18px;
+  }
+}
+
+
+/* ==========================================================================
+   3. TIME WARP REWIND CHRONOMETER ANIMATION (2026 -> 2006)
+   ========================================================================== */
+
+.timewarp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s ease;
+  overflow: hidden;
+}
+
+.timewarp-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.timewarp-overlay.exiting {
+  opacity: 0;
+  transform: scale(1.06);
+  filter: blur(8px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), filter 0.85s ease;
+}
+
+.timewarp-backdrop {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(14, 28, 60, 0.98) 0%, rgba(5, 10, 24, 0.99) 55%, #02050e 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.timewarp-portal-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 580px;
+  height: 580px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(229, 184, 92, 0.25) 0%, rgba(96, 165, 250, 0.12) 40%, transparent 70%);
+  animation: timewarpGlowPulse 3s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes timewarpGlowPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.92);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* Concentric Celestial Rings */
+.timewarp-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.timewarp-ring-outer {
+  width: 480px;
+  height: 480px;
+  margin-top: -240px;
+  margin-left: -240px;
+  border: 1px dashed rgba(229, 184, 92, 0.28);
+  animation: timewarpSpin 26s linear infinite;
+}
+
+.timewarp-ring-mid {
+  width: 360px;
+  height: 360px;
+  margin-top: -180px;
+  margin-left: -180px;
+  border: 1px dotted rgba(96, 165, 250, 0.22);
+  animation: timewarpSpin 18s linear infinite reverse;
+}
+
+.timewarp-ring-inner {
+  width: 260px;
+  height: 260px;
+  margin-top: -130px;
+  margin-left: -130px;
+  border: 1px solid rgba(229, 184, 92, 0.16);
+}
+
+@keyframes timewarpSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Shockwave on 2006 Impact */
+.timewarp-shockwave {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.2);
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 2px solid rgba(248, 214, 136, 0.95);
+  box-shadow: 0 0 35px rgba(229, 184, 92, 0.9), inset 0 0 20px rgba(248, 214, 136, 0.6);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.timewarp-shockwave.trigger {
+  animation: timewarpShockwave 1.1s cubic-bezier(0.12, 0.9, 0.26, 1) forwards;
+}
+
+@keyframes timewarpShockwave {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(6.5);
+    opacity: 0;
+  }
+}
+
+/* Speed Streaks */
+.timewarp-stars-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.timewarp-streak {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 48px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(229, 184, 92, 0.6) 50%, transparent 100%);
+  border-radius: 2px;
+  transform-origin: center top;
+  animation: timewarpStreakShoot 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+@keyframes timewarpStreakShoot {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(var(--rot)) scaleY(0.2);
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scaleY(1.8);
+  }
+}
+
+/* Stage & Typography */
+.timewarp-stage {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 580px;
+  padding: 24px;
+}
+
+.timewarp-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  color: var(--gold-primary, #e5b85c);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  opacity: 0.9;
+  text-shadow: 0 0 12px rgba(229, 184, 92, 0.4);
+}
+
+.warp-star {
+  font-size: 11px;
+  color: var(--gold-light, #f8d688);
+}
+
+/* Chronometer Scroll Viewport & Cylinder Reel */
+.timewarp-scroll-viewport {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  height: 260px;
+  margin: 18px auto 14px;
+  overflow: hidden;
+  border-left: 1px solid rgba(229, 184, 92, 0.28);
+  border-right: 1px solid rgba(229, 184, 92, 0.28);
+  box-shadow: inset 18px 0 35px -18px rgba(229, 184, 92, 0.16), inset -18px 0 35px -18px rgba(229, 184, 92, 0.16);
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.35) 15%, black 35%, black 65%, rgba(0, 0, 0, 0.35) 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.35) 15%, black 35%, black 65%, rgba(0, 0, 0, 0.35) 85%, transparent 100%);
+}
+
+/* Center Optical Reticle / Focus Lens */
+.timewarp-scroll-lens {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 100px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 5;
+  border-top: 1px solid rgba(229, 184, 92, 0.45);
+  border-bottom: 1px solid rgba(229, 184, 92, 0.45);
+  background: linear-gradient(90deg, transparent 0%, rgba(229, 184, 92, 0.08) 25%, rgba(229, 184, 92, 0.08) 75%, transparent 100%);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.timewarp-scroll-lens.landed {
+  border-color: rgba(248, 214, 136, 0.95);
+  box-shadow: 0 0 35px rgba(229, 184, 92, 0.4), inset 0 0 25px rgba(229, 184, 92, 0.2);
+}
+
+.lens-bracket {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--gold-light, #f8d688);
+  pointer-events: none;
+}
+
+.lens-bracket.tl { top: -1px; left: -1px; border-top: 2px solid; border-left: 2px solid; }
+.lens-bracket.tr { top: -1px; right: -1px; border-top: 2px solid; border-right: 2px solid; }
+.lens-bracket.bl { bottom: -1px; left: -1px; border-bottom: 2px solid; border-left: 2px solid; }
+.lens-bracket.br { bottom: -1px; right: -1px; border-bottom: 2px solid; border-right: 2px solid; }
+
+.lens-pointer {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: var(--gold-light, #f8d688);
+  text-shadow: 0 0 10px rgba(229, 184, 92, 0.7);
+  pointer-events: none;
+}
+.lens-pointer.left { left: 12px; }
+.lens-pointer.right { right: 12px; }
+
+/* The Moving Year Ribbon Track */
+.timewarp-year-track {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  will-change: transform;
+}
+
+/* Individual Year Items on the Reel */
+.year-scroll-item {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif, serif);
+  font-size: 64px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.22);
+  transform: scale(0.78);
+  filter: blur(2px);
+  transition: transform 0.22s ease, color 0.22s ease, opacity 0.22s ease, filter 0.22s ease, text-shadow 0.22s ease;
+  user-select: none;
+}
+
+.year-scroll-item.near {
+  color: rgba(248, 250, 252, 0.65);
+  transform: scale(0.88);
+  filter: blur(0.6px);
+}
+
+.year-scroll-item.active {
+  color: #ffffff;
+  font-size: 78px;
+  font-weight: 700;
+  transform: scale(1.06);
+  filter: blur(0px);
+  text-shadow: 0 0 36px rgba(229, 184, 92, 0.65), 0 0 72px rgba(229, 184, 92, 0.3);
+}
+
+.year-scroll-item.landed {
+  color: var(--gold-light, #f8d688);
+  font-size: 86px;
+  font-weight: 700;
+  transform: scale(1.15);
+  filter: blur(0px);
+  text-shadow: 0 0 50px rgba(248, 214, 136, 0.95), 0 0 100px rgba(229, 184, 92, 0.85), 0 0 160px rgba(229, 184, 92, 0.4);
+  animation: yearArrivalSwell 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes yearArrivalSwell {
+  0% {
+    transform: scale(1.22);
+    filter: brightness(1.6);
+  }
+  60% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1.15);
+    filter: brightness(1);
+  }
+}
+
+/* Date Tape & Elapsed Status */
+.timewarp-date {
+  font-family: var(--font-mono, monospace);
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  color: var(--gold-primary, #e5b85c);
+  margin-top: 14px;
+  text-transform: uppercase;
+  min-height: 22px;
+  text-shadow: 0 0 14px rgba(229, 184, 92, 0.4);
+  transition: color 0.2s ease;
+}
+
+.timewarp-elapsed {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 13.5px;
+  font-style: italic;
+  color: var(--text-soft, #94a3b8);
+  margin-top: 6px;
+  letter-spacing: 0.04em;
+  min-height: 20px;
+  transition: color 0.2s ease;
+}
+
+/* Arrival Destination Box */
+.timewarp-arrival {
+  margin-top: 26px;
+  opacity: 0;
+  transform: translateY(18px);
+  pointer-events: none;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.timewarp-arrival.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.arrival-pill {
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  color: #070b14;
+  background: linear-gradient(135deg, #e5b85c 0%, #f8d688 100%);
+  padding: 6px 18px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 18px rgba(229, 184, 92, 0.4);
+}
+
+.arrival-date {
+  font-family: var(--font-serif, serif);
+  font-size: 26px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.03em;
+  margin-bottom: 5px;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+.arrival-location {
+  font-family: var(--font-mono, monospace);
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
+  color: var(--gold-light, #f8d688);
+}
+
+@media (max-width: 520px) {
+  .timewarp-scroll-viewport {
+    height: 220px;
+    max-width: 320px;
+  }
+  .timewarp-scroll-lens {
+    height: 80px;
+  }
+  .timewarp-year-track {
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
+  .year-scroll-item {
+    height: 80px;
+    font-size: 50px;
+  }
+  .year-scroll-item.active {
+    font-size: 60px;
+  }
+  .year-scroll-item.landed {
+    font-size: 66px;
+  }
+  .arrival-date {
+    font-size: 21px;
+  }
+  .timewarp-ring-outer {
+    width: 340px;
+    height: 340px;
+    margin-top: -170px;
+    margin-left: -170px;
+  }
+  .timewarp-ring-mid {
+    width: 260px;
+    height: 260px;
+    margin-top: -130px;
+    margin-left: -130px;
+  }
+  .timewarp-portal-glow {
+    width: 360px;
+    height: 360px;
+  }
+}
+
+
