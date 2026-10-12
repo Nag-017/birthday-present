@@ -43,23 +43,7 @@
   }
 }
 
-/* Market Live Chart Pulse Dot — calm breathing radar pulse */
-.chart-end-dot {
-  animation: pulseDot 2.8s infinite ease-in-out;
-}
 
-@keyframes pulseDot {
-  0%, 100% {
-    r: 5;
-    fill: var(--gold-light, #f8d688);
-    opacity: 0.8;
-  }
-  50% {
-    r: 7.2;
-    fill: #ffffff;
-    opacity: 1;
-  }
-}
 
 
 /* --------------------------------------------------------------------------

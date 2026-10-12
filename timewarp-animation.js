@@ -24,7 +24,7 @@ const YEARS_DATA = [
   { year: 2009, date: 'FEBRUARY 2009', elapsed: '17 Years Ago · Age 3' },
   { year: 2008, date: 'SEPTEMBER 2008', elapsed: '18 Years Ago · Toddler Years' },
   { year: 2007, date: 'MAY 2007', elapsed: '19 Years Ago · First Year on Earth' },
-  { year: 2006, date: 'FRIDAY · OCTOBER 20, 2006', elapsed: 'Day Zero · The Arrival in Bidar' }
+  { year: 2006, date: 'FRIDAY · OCTOBER 20, 2006', elapsed: 'Day Zero · The Arrival of a Gem' }
 ];
 
 let isWarping = false;

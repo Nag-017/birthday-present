@@ -460,15 +460,7 @@ function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// --------------------------------------------------------------------------
-// 10. SECRET MOON WHISPER INTERACTION
-// --------------------------------------------------------------------------
-const moonShowcaseEl = document.querySelector('.moon-showcase');
-if (moonShowcaseEl) {
-  moonShowcaseEl.addEventListener('click', () => {
-    moonShowcaseEl.classList.toggle('revealed');
-  });
-}// Note: Birthday Letter & Envelope Intro Animation moved to envelope-animation.js
+// Note: Birthday Letter & Envelope Intro Animation moved to envelope-animation.js
 
 
 
