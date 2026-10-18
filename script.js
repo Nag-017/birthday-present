@@ -172,21 +172,60 @@ function updateLiveCounters() {
   const tWeeksVal = document.getElementById('t-weeks-val');
   if (tWeeksVal) tWeeksVal.textContent = totalWeeks.toLocaleString();
 
-  // Years & Days decomposed
-  const years = Math.floor(totalDays / 365.25);
-  const daysRemainder = Math.floor(totalDays - (years * 365.25));
+  // Exact Calendar Age & Days decomposed
+  let years = now.getFullYear() - BIRTH_DATE.getFullYear();
+  const thisYearBirthday = new Date(
+    now.getFullYear(),
+    BIRTH_DATE.getMonth(),
+    BIRTH_DATE.getDate(),
+    BIRTH_DATE.getHours(),
+    BIRTH_DATE.getMinutes(),
+    BIRTH_DATE.getSeconds()
+  );
+  let lastBirthday;
+  if (now >= thisYearBirthday) {
+    lastBirthday = thisYearBirthday;
+  } else {
+    years--;
+    lastBirthday = new Date(
+      now.getFullYear() - 1,
+      BIRTH_DATE.getMonth(),
+      BIRTH_DATE.getDate(),
+      BIRTH_DATE.getHours(),
+      BIRTH_DATE.getMinutes(),
+      BIRTH_DATE.getSeconds()
+    );
+  }
+
+  const msSinceLastBirthday = now.getTime() - lastBirthday.getTime();
+  const daysRemainder = Math.floor(msSinceLastBirthday / (1000 * 60 * 60 * 24));
+  const timeRemainderMs = msSinceLastBirthday % (1000 * 60 * 60 * 24);
 
   // Hours, Minutes, Seconds for uptime clock
   const totalSecs = Math.floor(diffMs / 1000);
-  const hours = Math.floor((totalSecs % 86400) / 3600);
-  const mins = Math.floor((totalSecs % 3600) / 60);
-  const secs = totalSecs % 60;
+  const hours = Math.floor(timeRemainderMs / (1000 * 60 * 60));
+  const mins = Math.floor((timeRemainderMs % (1000 * 60 * 60)) / (1000 * 60));
+  const secs = Math.floor((timeRemainderMs % (1000 * 60)) / 1000);
 
   const pad = (n) => String(n).padStart(2, '0');
   const clockText = `${years}y ${daysRemainder}d ${pad(hours)}:${pad(mins)}:${pad(secs)}`;
 
-  const clockBadge = document.getElementById('live-uptime-clock');
-  if (clockBadge) clockBadge.textContent = clockText;
+  // Update all uptime clock badges (hero and section 5 counter)
+  const clockBadges = document.querySelectorAll('.live-clock-badge, #live-uptime-clock, #hero-uptime-clock');
+  clockBadges.forEach(badge => {
+    badge.textContent = clockText;
+  });
+
+  // Complete orbits around the sun
+  const orbitsElem = document.getElementById('orbits-counter');
+  if (orbitsElem) orbitsElem.textContent = years;
+
+  // Full moons witnessed (~29.53059 days per lunar cycle)
+  const moonsElem = document.getElementById('moons-counter');
+  if (moonsElem) {
+    const totalMoons = Math.floor(totalDays / 29.53059);
+    moonsElem.textContent = totalMoons.toLocaleString();
+  }
 
   // Heartbeats live calculation (~72 bpm = 1.2 bps)
   const estimatedHeartbeats = Math.floor(totalSecs * 1.2);

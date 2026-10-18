@@ -78,6 +78,12 @@ body {
   padding: 80px 24px 140px;
 }
 
+@media (max-width: 480px) {
+  .page-wrapper {
+    padding: 60px 16px 120px;
+  }
+}
+
 /* Utilities */
 .gold-text {
   color: var(--gold-primary);
@@ -322,6 +328,293 @@ body {
   font-size: 14px;
   color: var(--text-main);
   font-weight: 500;
+}
+
+/* -------------------- 2.5 PLANETARY POSITIONS (OCTOBER 20, 2006) -------------------- */
+.section-lead-text {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-soft);
+  margin-top: -16px;
+  margin-bottom: 30px;
+}
+
+.orrery-card {
+  background: radial-gradient(circle at 50% 20%, rgba(16, 28, 56, 0.75) 0%, rgba(13, 21, 39, 0.95) 100%);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 20px;
+  padding: 28px 24px 22px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.orrery-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.orrery-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--gold-primary);
+  margin-bottom: 6px;
+}
+
+.orrery-title {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.orrery-subtitle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  margin-top: 4px;
+}
+
+.orrery-canvas-wrap {
+  position: relative;
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  background: radial-gradient(circle at center, rgba(8, 14, 28, 0.85) 0%, rgba(4, 7, 15, 0.98) 100%);
+  border: 1px solid rgba(229, 184, 92, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#planetary-orrery-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  cursor: default;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.orrery-tooltip {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -100%);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  background: rgba(9, 15, 30, 0.96);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(229, 184, 92, 0.45);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  z-index: 10;
+  white-space: normal;
+  max-width: calc(100% - 24px);
+  line-height: 1.4;
+}
+
+.orrery-tooltip.show {
+  opacity: 1;
+}
+
+.orrery-mobile-hint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--gold-light);
+  opacity: 0.8;
+  padding: 6px 12px 2px;
+  display: none;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .orrery-mobile-hint {
+    display: block;
+  }
+}
+
+.orrery-legend {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 12px 14px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-soft);
+  width: 100%;
+  border-top: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.legend-dot.stellium-dot {
+  background: var(--gold-primary);
+  box-shadow: 0 0 8px var(--gold-primary);
+}
+
+.legend-dot.earth-dot {
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+}
+
+/* Rare Triple Conjunction Highlight Banner */
+.stellium-banner {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  background: linear-gradient(135deg, rgba(229, 184, 92, 0.1) 0%, rgba(13, 21, 39, 0.85) 100%);
+  border: 1px solid rgba(229, 184, 92, 0.35);
+  border-radius: 18px;
+  padding: 24px 22px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 0 24px rgba(229, 184, 92, 0.05);
+}
+
+/* Mobile Optimizations for Planetary Section */
+@media (max-width: 600px) {
+  .orrery-card {
+    padding: 18px 12px 14px;
+    border-radius: 16px;
+    margin-bottom: 18px;
+  }
+
+  .orrery-header {
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+  }
+
+  .orrery-title {
+    font-size: 20px;
+    line-height: 1.25;
+  }
+
+  .orrery-subtitle {
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+  }
+
+  .orrery-legend {
+    gap: 8px 16px;
+    padding: 8px 6px 6px;
+    font-size: 9.5px;
+  }
+
+  .stellium-banner {
+    flex-direction: column;
+    padding: 18px 16px;
+    gap: 12px;
+    border-radius: 16px;
+  }
+
+  .stellium-icon-wrap {
+    flex-direction: row;
+    padding: 6px 12px;
+    gap: 8px;
+    align-self: flex-start;
+  }
+
+  .stellium-icon {
+    font-size: 20px;
+  }
+
+  .stellium-title {
+    font-size: 19px;
+  }
+
+  .stellium-desc {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+}
+
+.stellium-glow {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(229, 184, 92, 0.22) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.stellium-icon-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: rgba(229, 184, 92, 0.12);
+  border: 1px solid rgba(229, 184, 92, 0.3);
+  border-radius: 14px;
+  padding: 12px 14px;
+  flex-shrink: 0;
+}
+
+.stellium-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.stellium-symbol-cluster {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gold-light);
+  letter-spacing: 0.12em;
+}
+
+.stellium-body {
+  flex: 1;
+}
+
+.stellium-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--gold-light);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.stellium-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  color: var(--gold-light);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.stellium-desc {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #cbd5e1;
 }
 
 /* -------------------- 3. WEATHER CARD -------------------- */

@@ -167,7 +167,7 @@
         </button>
       </div>
 
-      <div class="live-clock-badge" id="live-uptime-clock">19y 354d 00:13:42</div>
+      <div class="live-clock-badge" id="hero-uptime-clock">19y 354d 00:13:42</div>
     </header>
 
     <!-- 2. THE SKY ABOVE YOU -->
@@ -215,6 +215,54 @@
             <span class="astro-key">SUNSET</span>
             <span class="astro-val">17:54</span>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2.5 THE PLANETS ALIGNED ABOVE YOU (OCTOBER 20, 2006) -->
+    <section class="story-section" id="planets-section">
+      <div class="section-label">THE SOLAR SYSTEM THAT DAY</div>
+      <h2 class="section-headline">The planets aligned when <span class="name-insert">Megha</span> arrived.</h2>
+      <p class="section-lead-text">
+        On Friday, October 20, 2006, the cosmos assembled in an extraordinarily balanced configuration.
+        The <strong>Sun, Venus, and Mars</strong> gathered in an ultra-tight conjunction in harmonious Libra,
+        while <strong>Mercury and Jupiter</strong> stood united in Scorpio.
+      </p>
+
+      <!-- Celestial Orrery Showcase -->
+      <div class="orrery-card">
+        <div class="orrery-header">
+          <div class="orrery-title-group">
+            <span class="orrery-badge">★ ASTRONOMICAL EPHEMERIS</span>
+            <h3 class="orrery-title">Planetary Positions · October 20, 2006</h3>
+            <p class="orrery-subtitle">EXACT HELIOCENTRIC &amp; ORBITAL ALIGNMENT</p>
+          </div>
+        </div>
+
+        <div class="orrery-canvas-wrap">
+          <canvas id="planetary-orrery-canvas" width="680" height="460"></canvas>
+          <div class="orrery-tooltip" id="orrery-tooltip"></div>
+          <div class="orrery-mobile-hint">✦ Tap any planet to explore</div>
+          <div class="orrery-legend">
+            <span class="legend-item"><span class="legend-dot stellium-dot"></span> The Libra Stellium (Sun · Venus · Mars)</span>
+            <span class="legend-item"><span class="legend-dot earth-dot"></span> Earth (Your Arrival)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rare Triple Conjunction Highlight Banner -->
+      <div class="stellium-banner">
+        <div class="stellium-glow"></div>
+        <div class="stellium-icon-wrap">
+          <div class="stellium-icon">⚖️</div>
+          <div class="stellium-symbol-cluster">☉ ♀ ♂</div>
+        </div>
+        <div class="stellium-body">
+          <div class="stellium-tag">RARE CELESTIAL PHENOMENON</div>
+          <h4 class="stellium-title">The Triple Libra Conjunction</h4>
+          <p class="stellium-desc">
+            The <strong>Sun</strong> (26°57′ Libra), <strong>Venus</strong> (25°05′ Libra), and <strong>Mars</strong> (27°51′ Libra) were clustered within less than 3° of each other—uniting the planet of beauty &amp; harmony (Venus) with vitality &amp; courage (Mars) flanking the Sun in diplomatic Libra.
+          </p>
         </div>
       </div>
     </section>
@@ -1003,7 +1051,7 @@
         <span class="divider-star">✦</span>
         <span class="divider-line"></span>
       </div>
-      <p class="footer-signoff">From Your friend and well-wisher</p>
+      <p class="footer-signoff">From Your Annoying Friend </p>
       <p class="footer-subtext">Made for <span class="name-insert">Megha</span> · Friday, October 20, 2026</p>
     </footer>
 
@@ -1053,6 +1101,7 @@
   <script src="starfield-animation.js"></script>
   <script src="envelope-animation.js"></script>
   <script src="timewarp-animation.js"></script>
+  <script src="planets-animation.js"></script>
 </body>
 
 </html>
