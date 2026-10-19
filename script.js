@@ -1,5 +1,5 @@
 /* ==========================================================================
-   BornHere — Megha (Friday, October 20, 2006 · Bidar, Karnataka, India)
+   BornHere — Megha (Friday, October 20, 2006 · Gulbarga, Karnataka, India)
    Interactive Engine & Dynamic Calculations
    ========================================================================== */
 
@@ -63,7 +63,7 @@ function drawCelestialSkyMap() {
     ctx.fillText(c.label, c.x, c.y);
   }
 
-  // Draw Constellation Patterns over Bidar, Karnataka (Oct 20, 2006)
+  // Draw Constellation Patterns over Gulbarga, Karnataka (Oct 20, 2006)
   // Pegagus / Cassiopeia / Ursa Major / Taurus lines
   const constellationLines = [
     // Cassiopeia 'W'
@@ -336,13 +336,13 @@ function copyShareUrl() {
 
 function shareWhatsApp() {
   const url = encodeURIComponent(window.location.href);
-  const text = encodeURIComponent("Check out Megha's BornHere story from Friday, October 20, 2006 in Bidar!");
+  const text = encodeURIComponent("Check out Megha's BornHere story from Friday, October 20, 2006 in Gulbarga!");
   window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`, '_blank');
 }
 
 function shareTwitter() {
   const url = encodeURIComponent(window.location.href);
-  const text = encodeURIComponent("The world the day Megha arrived in Bidar, Karnataka. Friday, October 20, 2006.");
+  const text = encodeURIComponent("The world the day Megha arrived in Gulbarga, Karnataka. Friday, October 20, 2006.");
   window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
 }
 

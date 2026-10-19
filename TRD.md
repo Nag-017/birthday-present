@@ -169,7 +169,7 @@ const profile = {
   birthTime: null,
   timeZone: "Asia/Kolkata",
   birthLocation: {
-    city: "Bidar",
+    city: "Gulbarga",
     region: "Karnataka",
     country: "India"
   }

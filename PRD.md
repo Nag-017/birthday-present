@@ -20,7 +20,7 @@ context, shareable card concepts, and a keepsake certificate.
 
 The current repository is a static front-end implementation. The page is
 personalized in its source code for **Megha**, born on **20 October
-2006** in **Bidar, Karnataka, India**. Much of the displayed historical
+2006** in **Gulbarga, Karnataka, India**. Much of the displayed historical
 and contextual information is hard-coded rather than retrieved from live
 data services.
 
